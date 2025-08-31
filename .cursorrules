@@ -1,0 +1,74 @@
+# Cursor Rules for Tarang's Portfolio Website
+# Auto-start development server after changes
+
+## Project Context
+This is a Next.js 14 portfolio website for Tarang Khetan, a Senior Backend Engineer and AI Learner.
+- Framework: Next.js 14 with App Router
+- Language: TypeScript
+- Styling: Tailwind CSS + shadcn/ui
+- Theme: Purple-themed dark mode for backend/AI branding
+
+## Development Workflow Rules
+
+### Auto-Start Development Server
+- After making any changes to files in `src/`, `public/`, or config files, automatically check if the development server is running
+- If no server is running on port 3000, execute `npm run dev` in the background
+- Always ensure the portfolio is accessible at http://localhost:3000
+- If changes are made to `package.json`, run `npm install` first, then `npm run dev`
+
+### Code Quality Standards
+- All React components must use TypeScript
+- Use 'use client' directive for client-side components with hooks or animations
+- Maintain the purple color theme with variables defined in globals.css
+- Keep responsive design with mobile-first approach
+- Use Framer Motion for smooth animations and transitions
+
+### File Change Triggers
+When these files are modified, restart the development server:
+- Any file in `src/app/`
+- `tailwind.config.*`
+- `next.config.*`
+- `package.json`
+- `globals.css`
+
+### Portfolio-Specific Guidelines
+- Position Tarang as "Senior Backend Engineer | AI Learner & Enthusiast" (not expert)
+- Emphasize 700+ crores monthly processing scale
+- Highlight IIIT Jabalpur education
+- Show AI as a learning journey, not mastery
+- Ensure resume downloads work from /Tarang_Khetan_Resume.pdf
+- Maintain working LinkedIn and GitHub links:
+  - LinkedIn: https://www.linkedin.com/in/tarang-khetan-05356b179/
+  - GitHub: https://github.com/tarang75490
+
+### Error Handling
+- If server fails to start, check for port conflicts
+- Clear port 3000 if needed: `lsof -ti:3000 | xargs kill -9 2>/dev/null`
+- Always show server status and localhost:3000 URL when server starts
+
+### Auto Commands After Changes
+```bash
+# After file changes in src/ or config files:
+npm run dev
+
+# After package.json changes:
+npm install && npm run dev
+
+# If port 3000 is busy:
+lsof -ti:3000 | xargs kill -9 2>/dev/null && npm run dev
+```
+
+## Specific Component Rules
+- Homepage: Must include working resume download button
+- All pages: Maintain consistent navigation with purple theme
+- Contact forms: Use proper external link attributes (target="_blank" rel="noopener noreferrer")
+- Projects: No source code buttons, focus on "View Details" only
+- Target roles: Senior Backend Engineer and AI Engineering (no Staff Engineer)
+
+## Success Criteria
+- Portfolio loads successfully at http://localhost:3000
+- All pages navigate properly
+- Resume downloads automatically when clicked
+- Purple theme is consistent across all pages
+- Mobile responsiveness is maintained
+- No TypeScript or linting errors

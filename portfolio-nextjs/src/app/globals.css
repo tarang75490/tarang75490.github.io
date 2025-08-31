@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  /* Light mode - minimal for documentation */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.15 0.02 280);
+  --card: oklch(0.98 0.01 280);
+  --card-foreground: oklch(0.15 0.02 280);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.02 280);
+  --primary: oklch(0.45 0.15 280); /* Purple primary */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.01 280);
+  --secondary-foreground: oklch(0.15 0.02 280);
+  --muted: oklch(0.95 0.01 280);
+  --muted-foreground: oklch(0.55 0.02 280);
+  --accent: oklch(0.55 0.12 280); /* Purple accent */
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.9 0.01 280);
+  --input: oklch(0.9 0.01 280);
+  --ring: oklch(0.45 0.15 280);
+  --chart-1: oklch(0.55 0.15 280); /* Purple */
+  --chart-2: oklch(0.65 0.12 250); /* Blue-purple */
+  --chart-3: oklch(0.7 0.1 300); /* Magenta */
+  --chart-4: oklch(0.6 0.08 320); /* Pink-purple */
+  --chart-5: oklch(0.5 0.18 260); /* Deep purple */
+  --sidebar: oklch(0.98 0.01 280);
+  --sidebar-foreground: oklch(0.15 0.02 280);
+  --sidebar-primary: oklch(0.45 0.15 280);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.95 0.01 280);
+  --sidebar-accent-foreground: oklch(0.15 0.02 280);
+  --sidebar-border: oklch(0.9 0.01 280);
+  --sidebar-ring: oklch(0.45 0.15 280);
+}
+
+.dark {
+  /* Primary dark theme - Rich purple for Backend + AI branding */
+  --background: oklch(0.08 0.02 280); /* Rich black with purple hint */
+  --foreground: oklch(0.95 0.01 280); /* Pure white with subtle purple */
+  --card: oklch(0.15 0.03 280); /* Dark purple cards */
+  --card-foreground: oklch(0.95 0.01 280);
+  --popover: oklch(0.12 0.02 280); /* Slightly lighter than background */
+  --popover-foreground: oklch(0.95 0.01 280);
+  --primary: oklch(0.65 0.18 280); /* Vibrant purple - primary brand */
+  --primary-foreground: oklch(0.08 0.02 280);
+  --secondary: oklch(0.2 0.04 280); /* Dark purple secondary */
+  --secondary-foreground: oklch(0.9 0.01 280);
+  --muted: oklch(0.18 0.03 280); /* Muted dark purple */
+  --muted-foreground: oklch(0.7 0.02 280);
+  --accent: oklch(0.55 0.15 290); /* Electric purple accent */
+  --accent-foreground: oklch(0.08 0.02 280);
+  --destructive: oklch(0.65 0.2 25); /* Warm red for errors */
+  --border: oklch(0.25 0.04 280); /* Subtle purple borders */
+  --input: oklch(0.2 0.03 280); /* Input backgrounds */
+  --ring: oklch(0.65 0.18 280); /* Focus rings */
+  --chart-1: oklch(0.65 0.18 280); /* Deep Purple - Backend systems */
+  --chart-2: oklch(0.7 0.15 250); /* Electric Blue - Performance */
+  --chart-3: oklch(0.6 0.12 320); /* Magenta - AI/ML */
+  --chart-4: oklch(0.75 0.1 300); /* Pink-Purple - Innovation */
+  --chart-5: oklch(0.8 0.08 260); /* Light Purple - Success metrics */
+  --sidebar: oklch(0.12 0.02 280); /* Sidebar background */
+  --sidebar-foreground: oklch(0.9 0.01 280);
+  --sidebar-primary: oklch(0.65 0.18 280); /* Purple sidebar primary */
+  --sidebar-primary-foreground: oklch(0.08 0.02 280);
+  --sidebar-accent: oklch(0.18 0.03 280);
+  --sidebar-accent-foreground: oklch(0.9 0.01 280);
+  --sidebar-border: oklch(0.25 0.04 280);
+  --sidebar-ring: oklch(0.65 0.18 280);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  
+  /* Default to dark mode for Backend + AI branding */
+  html {
+    color-scheme: dark;
+  }
+  
+  html.dark {
+    /* Ensure dark mode is applied */
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+  
+  /* Custom purple gradients for AI/Backend branding */
+  .gradient-purple-ai {
+    background: linear-gradient(135deg, 
+      oklch(0.65 0.18 280) 0%, 
+      oklch(0.55 0.15 290) 50%, 
+      oklch(0.6 0.12 320) 100%);
+  }
+  
+  .gradient-backend-scale {
+    background: linear-gradient(45deg,
+      oklch(0.08 0.02 280) 0%,
+      oklch(0.15 0.03 280) 50%,
+      oklch(0.12 0.02 280) 100%);
+  }
+  
+  /* Professional glow effects for interactive elements */
+  .glow-purple {
+    box-shadow: 0 0 20px oklch(0.65 0.18 280 / 0.3);
+  }
+  
+  .glow-accent {
+    box-shadow: 0 0 15px oklch(0.55 0.15 290 / 0.4);
+  }
+}
