@@ -18,7 +18,7 @@ export const aboutContent = {
     titleHighlight1: "IIIT Jabalpur",
     titleMiddle: " to Building\nSystems at ",
     titleHighlight2: "Scale",
-    subtitle: "Senior Backend Engineer with 3+ years of experience building production financial systems. Actively learning and integrating AI tools into daily development workflows."
+    subtitle: "Senior Backend Engineer with 3+ years of deep payments domain expertise and passionate AI enthusiast. Architect of mission-critical financial systems while actively learning and applying AI in daily development workflows."
   },
 
   // Education section
@@ -75,7 +75,7 @@ export const aboutContent = {
         id: "backend",
         icon: "Database",
         title: "Backend Systems", 
-        description: "Deep expertise in building scalable, high-performance backend systems that handle millions of transactions and process hundreds of crores monthly.",
+        description: "Deep expertise in payments infrastructure - payment gateways, UPI systems, NPCI integrations, mandate flows, multi-vendor routing, and transaction processing systems that handle 600-700 crores monthly.",
         skillGroups: [
           {
             title: "Languages & Frameworks",
@@ -94,8 +94,8 @@ export const aboutContent = {
       {
         id: "ai",
         icon: "Brain",
-        title: "AI Learning Journey",
-        description: "Actively learning and applying AI in daily development workflows. Award-winning hackathon experience with AI-powered solutions that improve customer experience.",
+        title: "AI Enthusiast & Daily User",
+        description: "Passionate about AI and actively using AI tools in daily development workflows. Won 1st place hackathon with AI-powered customer experience platform. Enthusiastically exploring AI/ML integration in fintech systems.",
         skillGroups: [
           {
             title: "AI Applications",
@@ -103,11 +103,11 @@ export const aboutContent = {
           },
           {
             title: "Learning Focus", 
-            skills: ["NLP", "ML Engineering", "LLM Integration", "AI for Fintech"]
+            skills: ["NLP", "ML Engineering", "LLM Integration", "AI for Fintech", "Daily AI Tools Usage"]
           },
           {
             title: "Recognition",
-            skills: ["🥇 Hackathon Winner", "Production AI"]
+            skills: ["🥇 Hackathon Winner", "Production AI", "AI Enthusiast", "Continuous Learning"]
           }
         ]
       },

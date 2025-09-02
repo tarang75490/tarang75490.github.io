@@ -143,7 +143,7 @@ export default function Projects() {
                             Technologies Used
                           </h4>
                           <div className="flex flex-wrap gap-2">
-                            {project.tech.map((tech) => (
+                            {project.technologies.map((tech) => (
                               <Badge key={tech} variant="secondary" className="text-primary border-primary/20">
                                 {tech}
                               </Badge>

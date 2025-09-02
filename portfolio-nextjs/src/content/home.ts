@@ -16,11 +16,11 @@ export const homeContent = {
 
   // Hero section
   hero: {
-    badge: "Senior Backend Engineer • AI Learner & Enthusiast",
-    titleStart: "Building systems that process ",
-    titleHighlight: "700+ crores",
-    titleEnd: " monthly",
-    description: "Senior Backend Engineer from IIIT Jabalpur actively leveraging AI in daily workflows. Specialized in building scalable financial systems with modern AI integration."
+    badge: "Senior Backend Engineer • Payments Expert • AI Enthusiast",
+    titleStart: "Building ",
+    titleHighlight: "Payments Systems ",
+    titleEnd: " at scale",
+    description: "Backend Engineer from IIIT Jabalpur specializing in payments infrastructure and AI integration. I architect scalable financial systems that enhance customer experiences while leveraging AI to optimize development workflows and operational efficiency."
   },
 
   // Key metrics cards
@@ -47,25 +47,25 @@ export const homeContent = {
   // Core expertise section
   expertise: {
     title: {
-      start: "Backend Mastery meets ",
-      highlight: "AI Learning"
+      start: "Payments Expertise meets ",
+      highlight: "AI Innovation"
     },
-    subtitle: "From IIIT Jabalpur to building production systems at scale. Leveraging AI in daily workflows while building award-winning solutions in financial systems.",
+    subtitle: "From IIIT Jabalpur to building payment systems at massive scale while passionate about AI. Combining deep financial infrastructure expertise with AI enthusiasm to create intelligent, scalable fintech solutions.",
     
     cards: [
       {
-        id: "scale-expert",
+        id: "payments-expert",
         icon: "Zap",
-        title: "Scale Expert",
-        description: "Built systems processing 700+ crores monthly with 99% uptime. Optimized Kafka throughput by 20x through concurrent processing.",
-        badges: ["600-700 RPM", "Multi-tenant", "Distributed Systems"]
+        title: "Payments Infrastructure Expert",
+        description: "Architected payment systems processing 600-700 crores monthly with 98% success rates. Built multi-tenant payment gateway, UPI mandates, E-NACH systems, and NPCI integrations.",
+        badges: ["600-700 Crores/month", "Multi-Vendor Gateway", "NPCI Integration"]
       },
       {
-        id: "ai-learning",
+        id: "ai-enthusiast",
         icon: "Brain", 
-        title: "AI Learning & Application",
-        description: "Won 1st place at slice hackathon by applying AI in customer experience platform. Actively learning and integrating AI tools into daily development workflows.",
-        badges: ["Hackathon Winner", "Customer AI", "NLP Systems"]
+        title: "AI Enthusiast & Daily User",
+        description: "Passionate AI learner actively using AI tools in daily workflows and development. Won 1st place hackathon with AI-powered customer experience platform. Exploring ML/NLP integration in fintech systems.",
+        badges: ["🥇 AI Hackathon Winner", "Daily AI User", "ML in Fintech"]
       },
       {
         id: "recognition",
@@ -84,7 +84,7 @@ export const homeContent = {
       highlight: "big system",
       end: "?"
     },
-    subtitle: "Open to Senior Backend or AI Engineering roles at fintech, big tech, and AI startups.",
+    subtitle: "Open to Senior Backend, Payments Engineering, or AI Engineering roles at fintech companies building the future of intelligent financial systems.",
     
     buttons: [
       {

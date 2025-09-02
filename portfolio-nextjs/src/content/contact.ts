@@ -16,7 +16,7 @@ export const contactContent = {
   header: {
     titleStart: "Let's Build Something ",
     titleHighlight: "Amazing",
-    subtitle: "Whether you're looking to discuss a challenging technical problem, explore collaboration opportunities, or talk about leveraging AI in backend systems, I'd love to hear from you."
+    subtitle: "Whether you're looking to discuss payments architecture, explore AI applications in fintech, or talk about building intelligent payment infrastructure, I'd love to hear from you."
   },
 
   // Contact methods
@@ -66,8 +66,8 @@ export const contactContent = {
   // Availability information  
   availability: {
     status: "Open to opportunities",
-    roles: ["Senior Backend Engineer", "AI Engineering"],
-    companies: ["Fintech", "Big Tech", "AI Startups"],
+    roles: ["Senior Backend Engineer", "Payments Engineering", "AI Engineering", "Staff Engineer"],
+    companies: ["Fintech", "AI-driven Fintech", "Payment Processors", "Financial Infrastructure", "Big Tech"],
     location: "Bangalore, KA (Open to remote/relocation)",
     timezone: "IST (GMT+5:30)",
     responseTime: "Within 24 hours"
@@ -147,13 +147,13 @@ export const contactContent = {
   // Discussion topics
   discussionTopics: {
     title: "Let's discuss ",
-    titleHighlight: "backend systems and AI learning",
-    description: "I'm always excited to talk about system architecture, performance optimization, integrating AI tools in development workflows, or any challenging technical problems you're working on.",
+    titleHighlight: "payments systems and AI innovation",
+    description: "I'm always excited to talk about payments architecture, AI applications in fintech, NPCI integrations, intelligent financial systems, or innovative solutions combining payments expertise with AI.",
     topics: [
       "System Architecture",
-      "Performance at Scale", 
-      "AI Learning & Tools",
-      "Fintech Systems",
+      "AI Learning & Tools", 
+      "NPCI & UPI Systems",
+      "Intelligent Payment Systems",
       "Technical Leadership"
     ]
   },
