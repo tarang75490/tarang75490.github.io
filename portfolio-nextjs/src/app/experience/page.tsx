@@ -18,134 +18,12 @@ import {
   Briefcase
 } from "lucide-react";
 import Link from "next/link";
+import { experienceContent } from "@/content/experience";
 
 export default function Experience() {
-  const experiences = [
-    {
-      id: 1,
-      company: "slice",
-      role: "Software Development Engineer-2",
-      duration: "Jan 2022 - Present",
-      location: "Bangalore, KA",
-      type: "Full-time",
-      current: true,
-      description: "Senior backend engineer building critical financial systems processing 700+ crores monthly. Leading AI implementations and system optimizations at scale.",
-      achievements: [
-        {
-          title: "Built Payouts-SVC System",
-          description: "Designed and developed critical distributed service handling 600-700 RPM with 99% success rate",
-          impact: "700+ crores monthly disbursements",
-          metrics: "99% success rate, 600-700 RPM"
-        },
-        {
-          title: "AI Hackathon Winner",
-          description: "Secured 1st place with AI-powered customer experience platform featuring intelligent chatbots and customer insights",
-          impact: "Boosted customer experience and support productivity",
-          metrics: "🥇 First place winner"
-        },
-        {
-          title: "System Performance Optimization",
-          description: "Improved Kafka consumer throughput by 20x through concurrent message processing and thread pooling",
-          impact: "Enhanced system scalability and performance",
-          metrics: "20x performance improvement"
-        },
-        {
-          title: "Operational Excellence",
-          description: "Reduced operational overhead by documenting processes and optimizing workflows",
-          impact: "100% reduction in support queries in specific areas",
-          metrics: "100% query reduction"
-        },
-        {
-          title: "EGV Success Rate Improvement",
-          description: "Enhanced Electronic Gift Voucher system by identifying and fixing legacy bugs",
-          impact: "Improved system reliability and customer experience",
-          metrics: "96% success rate (up from 80%)"
-        }
-      ],
-      technologies: [
-        "Java", "Spring Boot", "Node.js", "React.js", "TypeScript", 
-        "MongoDB", "PostgreSQL", "Redis", "Kafka", "AWS SQS", "AWS SNS", "GitHub"
-      ],
-      skills: ["System Architecture", "Microservices", "AI Implementation", "Performance Optimization", "Team Leadership"],
-      awards: ["🥇 slice Lab Hackathon Winner", "⭐ SPOTLIGHT Award", "🌟 Star of Sprint Award"]
-    },
-    {
-      id: 2,
-      company: "Frshr Technologies",
-      role: "Software Engineering Intern",
-      duration: "Dec 2020 - Jan 2022",
-      location: "Bangalore, KA",
-      type: "Internship",
-      current: false,
-      description: "Pioneered blockchain and crypto technology implementations, building NFT marketplace and transaction systems during the early crypto boom.",
-      achievements: [
-        {
-          title: "NFT Marketplace Development",
-          description: "Designed and built complete NFT marketplace with crypto token transaction capabilities",
-          impact: "Delivered full-featured blockchain application",
-          metrics: "Production-ready marketplace"
-        },
-        {
-          title: "HBAR Integration",
-          description: "Implemented seamless cryptocurrency transactions using HBAR coins",
-          impact: "Enabled smooth crypto payments and transfers",
-          metrics: "Blockchain-native transactions"
-        },
-        {
-          title: "Innovation Leadership",
-          description: "Led adoption of cutting-edge blockchain technology in early-stage startup environment",
-          impact: "Positioned company at forefront of crypto innovation",
-          metrics: "Technology pioneer"
-        }
-      ],
-      technologies: ["Node.js", "Express", "MongoDB", "Blockchain", "HBAR", "Cryptocurrency APIs"],
-      skills: ["Blockchain Development", "Crypto Integration", "Innovation", "Startup Environment"],
-      awards: []
-    },
-    {
-      id: 3,
-      company: "Six Hats Fathoms",
-      role: "Software Engineering Intern",
-      duration: "May 2020 - Sep 2020",
-      location: "Vadodara, GJ",
-      type: "Internship",
-      current: false,
-      description: "Built foundation in full-stack development creating responsive web applications and content management systems.",
-      achievements: [
-        {
-          title: "Content Management System",
-          description: "Developed responsive CMS with full CRUD functionality and access control",
-          impact: "Delivered complete content management solution",
-          metrics: "Full-featured CMS"
-        },
-        {
-          title: "Service Booking Platform",
-          description: "Created mobile-responsive booking website with agent selection and time slot management",
-          impact: "Streamlined service booking across multiple sectors",
-          metrics: "Multi-sector platform"
-        },
-        {
-          title: "Full-Stack Foundation",
-          description: "Mastered modern web development practices and responsive design principles",
-          impact: "Built strong technical foundation for career growth",
-          metrics: "Multi-technology expertise"
-        }
-      ],
-      technologies: ["React", "React-Bootstrap", "CSS", "HTML", "JavaScript"],
-      skills: ["Full-Stack Development", "Responsive Design", "UI/UX", "Web Standards"],
-      awards: []
-    }
-  ];
-
-  const education = {
-    institution: "Indian Institute of Information Technology Jabalpur",
-    degree: "Bachelor of Technology in Computer Science and Engineering",
-    duration: "July 2018 - April 2022",
-    location: "Jabalpur, MP",
-    gpa: "8.5/10",
-    description: "Premier technical institution known for producing exceptional software engineers. Built strong foundation in computer science fundamentals and system design."
-  };
-
+  // Get experiences from content
+  const experiences = experienceContent.experiences;
+  
   return (
     <div className="min-h-screen bg-gradient-backend-scale">
       {/* Navigation */}
@@ -256,7 +134,7 @@ export default function Experience() {
                           </p>
 
                           {/* Awards */}
-                          {exp.awards.length > 0 && (
+                          {'awards' in exp && exp.awards && exp.awards.length > 0 && (
                             <div className="mb-6">
                               <div className="flex flex-wrap gap-2">
                                 {exp.awards.map((award) => (
@@ -312,18 +190,20 @@ export default function Experience() {
                           </div>
                         </div>
                         
-                        <div>
-                          <h5 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-                            Skills Developed
-                          </h5>
-                          <div className="flex flex-wrap gap-2">
-                            {exp.skills.map((skill) => (
-                              <Badge key={skill} variant="secondary" className="text-xs text-primary border-primary/20">
-                                {skill}
-                              </Badge>
-                            ))}
+                        {'skills' in exp && exp.skills && exp.skills.length > 0 && (
+                          <div>
+                            <h5 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                              Skills Developed
+                            </h5>
+                            <div className="flex flex-wrap gap-2">
+                              {exp.skills.map((skill) => (
+                                <Badge key={skill} variant="secondary" className="text-xs text-primary border-primary/20">
+                                  {skill}
+                                </Badge>
+                              ))}
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </Card>
@@ -355,28 +235,28 @@ export default function Experience() {
                 <div className="flex-1">
                   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
                     <div>
-                      <h3 className="text-2xl font-bold text-primary mb-2">{education.institution}</h3>
-                      <h4 className="text-lg font-semibold mb-3">{education.degree}</h4>
+                      <h3 className="text-2xl font-bold text-primary mb-2">{experienceContent.education.institution}</h3>
+                      <h4 className="text-lg font-semibold mb-3">{experienceContent.education.degree} - {experienceContent.education.field}</h4>
                       <Badge className="gradient-purple-ai text-white">
                         <Award className="w-3 h-3 mr-1" />
-                        GPA: {education.gpa}
+                        GPA: {experienceContent.education.gpa}
                       </Badge>
                     </div>
                     
                     <div className="text-right text-muted-foreground">
                       <div className="flex items-center gap-2 mb-1">
                         <Calendar className="w-4 h-4" />
-                        <span className="text-sm">{education.duration}</span>
+                        <span className="text-sm">{experienceContent.education.duration}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4" />
-                        <span className="text-sm">{education.location}</span>
+                        <span className="text-sm">{experienceContent.education.location}</span>
                       </div>
                     </div>
                   </div>
                   
                   <p className="text-muted-foreground leading-relaxed">
-                    {education.description}
+                    {experienceContent.education.description}
                   </p>
                 </div>
               </div>

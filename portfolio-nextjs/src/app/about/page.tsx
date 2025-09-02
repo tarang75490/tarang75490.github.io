@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { GraduationCap, Award, Code2, Database, Brain, Cloud, ArrowLeft, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { aboutContent } from "@/content/about";
 
 export default function About() {
   return (
@@ -14,14 +15,18 @@ export default function About() {
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <Link href="/" className="font-bold text-xl gradient-purple-ai bg-clip-text text-transparent">
-            Tarang Khetan
+            {aboutContent.name}
           </Link>
           <div className="hidden md:flex space-x-8">
-            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-            <Link href="/about" className="text-primary">About</Link>
-            <Link href="/projects" className="hover:text-primary transition-colors">Projects</Link>
-            <Link href="/experience" className="hover:text-primary transition-colors">Experience</Link>
-            <Link href="/contact" className="hover:text-primary transition-colors">Contact</Link>
+            {aboutContent.navigation.map((nav) => (
+              <Link 
+                key={nav.href} 
+                href={nav.href} 
+                className={'active' in nav && nav.active ? "text-primary" : "hover:text-primary transition-colors"}
+              >
+                {nav.label}
+              </Link>
+            ))}
           </div>
           <Link href="/" className="md:hidden">
             <ArrowLeft className="w-6 h-6" />
@@ -39,12 +44,11 @@ export default function About() {
             className="text-center mb-16"
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              From <span className="text-primary">IIIT Jabalpur</span> to Building 
-              <br />Systems at <span className="gradient-purple-ai bg-clip-text text-transparent">Scale</span>
+              {aboutContent.header.titleStart}<span className="text-primary">{aboutContent.header.titleHighlight1}</span>{aboutContent.header.titleMiddle}
+              <span className="gradient-purple-ai bg-clip-text text-transparent">{aboutContent.header.titleHighlight2}</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Senior Backend Engineer with 3+ years of experience building production financial systems. 
-              Actively learning and integrating AI tools into daily development workflows.
+              {aboutContent.header.subtitle}
             </p>
           </motion.div>
 
@@ -57,42 +61,35 @@ export default function About() {
           >
             <h2 className="text-3xl font-bold mb-12 text-center">
               <GraduationCap className="w-8 h-8 inline mr-4 text-primary" />
-              Academic Foundation
+              {aboutContent.education.sectionTitle}
             </h2>
             
             <Card className="p-8 gradient-backend-scale border-primary/20 glow-purple">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
                   <h3 className="text-2xl font-bold mb-4 text-primary">
-                    Indian Institute of Information Technology Jabalpur
+                    {aboutContent.education.institution.name}
                   </h3>
-                  <p className="text-lg mb-4">Bachelor of Technology in Computer Science and Engineering</p>
+                  <p className="text-lg mb-4">{aboutContent.education.institution.degree}</p>
                   <div className="flex items-center gap-4 mb-6">
                     <Badge variant="secondary" className="text-primary border-primary/20">
                       <Award className="w-4 h-4 mr-1" />
-                      GPA: 8.5/10
+                      {aboutContent.education.institution.gpa}
                     </Badge>
                     <Badge variant="secondary" className="text-muted-foreground">
-                      2018 - 2022
+                      {aboutContent.education.institution.duration}
                     </Badge>
                   </div>
                   <p className="text-muted-foreground">
-                    Premier technical institution known for producing exceptional software engineers. 
-                    Built strong foundation in computer science fundamentals, algorithms, and system design 
-                    that enabled rapid professional growth.
+                    {aboutContent.education.institution.description}
                   </p>
                 </div>
                 <div className="space-y-4">
-                  <h4 className="text-lg font-semibold">Key Coursework</h4>
+                  <h4 className="text-lg font-semibold">{aboutContent.education.coursework.title}</h4>
                   <div className="grid grid-cols-2 gap-2">
-                    <Badge variant="outline">Data Structures</Badge>
-                    <Badge variant="outline">Algorithms</Badge>
-                    <Badge variant="outline">System Design</Badge>
-                    <Badge variant="outline">Database Systems</Badge>
-                    <Badge variant="outline">Computer Networks</Badge>
-                    <Badge variant="outline">Operating Systems</Badge>
-                    <Badge variant="outline">Software Engineering</Badge>
-                    <Badge variant="outline">Machine Learning</Badge>
+                    {aboutContent.education.coursework.subjects.map((subject) => (
+                      <Badge key={subject} variant="outline">{subject}</Badge>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -107,57 +104,26 @@ export default function About() {
             className="mb-20"
           >
             <h2 className="text-3xl font-bold mb-12 text-center">
-              Professional Evolution: From Intern to <span className="text-primary">System Architect</span>
+              {aboutContent.journey.sectionTitle}<span className="text-primary">{aboutContent.journey.sectionTitleHighlight}</span>
             </h2>
             
             <div className="grid md:grid-cols-3 gap-8">
-              <Card className="p-6 gradient-backend-scale border-primary/20">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-primary mb-2">2020</div>
-                  <h3 className="text-xl font-semibold mb-4">Full-Stack Foundation</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Started as intern building responsive web applications and content management systems. 
-                    Learned React, Node.js, and modern web development practices.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">React</Badge>
-                    <Badge variant="secondary">Node.js</Badge>
-                    <Badge variant="secondary">MongoDB</Badge>
+              {aboutContent.journey.stages.map((stage) => (
+                <Card key={stage.year} className="p-6 gradient-backend-scale border-primary/20">
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-primary mb-2">{stage.year}</div>
+                    <h3 className="text-xl font-semibold mb-4">{stage.title}</h3>
+                    <p className="text-muted-foreground mb-4">
+                      {stage.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {stage.technologies.map((tech) => (
+                        <Badge key={tech} variant="secondary">{tech}</Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </Card>
-
-              <Card className="p-6 gradient-backend-scale border-primary/20">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-primary mb-2">2021</div>
-                  <h3 className="text-xl font-semibold mb-4">Blockchain & Innovation</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Built NFT marketplace and crypto transaction systems. Dove deep into emerging 
-                    technologies and learned to work with cutting-edge concepts.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">Blockchain</Badge>
-                    <Badge variant="secondary">NFTs</Badge>
-                    <Badge variant="secondary">HBAR</Badge>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-6 gradient-backend-scale border-primary/20">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-primary mb-2">2022+</div>
-                  <h3 className="text-xl font-semibold mb-4">Scale & AI Mastery</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Senior role building financial systems processing 700+ crores monthly. 
-                    Won AI hackathon while optimizing backend systems for extreme performance.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">Java/Spring</Badge>
-                    <Badge variant="secondary">AI/ML</Badge>
-                    <Badge variant="secondary">Scale</Badge>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              ))}
             </div>
           </motion.div>
 
@@ -169,124 +135,34 @@ export default function About() {
             className="mb-20"
           >
             <h2 className="text-3xl font-bold mb-12 text-center">
-              Technical Expertise: <span className="text-primary">T-Shaped Engineer</span>
+              {aboutContent.skills.sectionTitle}<span className="text-primary">{aboutContent.skills.sectionTitleHighlight}</span>
             </h2>
             
             <div className="grid lg:grid-cols-3 gap-8">
-              {/* Backend Mastery */}
-              <Card className="p-8 gradient-backend-scale border-primary/20">
-                <Database className="w-12 h-12 text-primary mb-6" />
-                <h3 className="text-2xl font-bold mb-4">Backend Systems</h3>
-                <p className="text-muted-foreground mb-6">
-                  Deep expertise in building scalable, high-performance backend systems 
-                  that handle millions of transactions and process hundreds of crores monthly.
-                </p>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Languages & Frameworks</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">Java</Badge>
-                      <Badge variant="secondary">Spring Boot</Badge>
-                      <Badge variant="secondary">Node.js</Badge>
-                      <Badge variant="secondary">Express</Badge>
-                      <Badge variant="secondary">TypeScript</Badge>
+              {aboutContent.skills.categories.map((category) => {
+                const IconComponent = category.icon === 'Database' ? Database : category.icon === 'Brain' ? Brain : Cloud;
+                return (
+                  <Card key={category.id} className="p-8 gradient-backend-scale border-primary/20">
+                    <IconComponent className="w-12 h-12 text-primary mb-6" />
+                    <h3 className="text-2xl font-bold mb-4">{category.title}</h3>
+                    <p className="text-muted-foreground mb-6">
+                      {category.description}
+                    </p>
+                    <div className="space-y-4">
+                      {category.skillGroups.map((group) => (
+                        <div key={group.title}>
+                          <h4 className="font-semibold mb-2">{group.title}</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {group.skills.map((skill) => (
+                              <Badge key={skill} variant="secondary">{skill}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Databases</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">PostgreSQL</Badge>
-                      <Badge variant="secondary">MongoDB</Badge>
-                      <Badge variant="secondary">Redis</Badge>
-                      <Badge variant="secondary">MySQL</Badge>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Architecture</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">Microservices</Badge>
-                      <Badge variant="secondary">Hexagonal</Badge>
-                      <Badge variant="secondary">Event-Driven</Badge>
-                      <Badge variant="secondary">Multi-tenant</Badge>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              {/* AI Implementation */}
-              <Card className="p-8 gradient-backend-scale border-primary/20">
-                <Brain className="w-12 h-12 text-primary mb-6" />
-                <h3 className="text-2xl font-bold mb-4">AI Learning Journey</h3>
-                <p className="text-muted-foreground mb-6">
-                  Actively learning and applying AI in daily development workflows. 
-                  Award-winning hackathon experience with AI-powered solutions that improve customer experience.
-                </p>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">AI Applications</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">Customer Insights</Badge>
-                      <Badge variant="secondary">Intelligent Chatbots</Badge>
-                      <Badge variant="secondary">Response Systems</Badge>
-                      <Badge variant="secondary">Data Analysis</Badge>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Learning Focus</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">NLP</Badge>
-                      <Badge variant="secondary">ML Engineering</Badge>
-                      <Badge variant="secondary">LLM Integration</Badge>
-                      <Badge variant="secondary">AI for Fintech</Badge>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Recognition</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">🥇 Hackathon Winner</Badge>
-                      <Badge variant="secondary">Production AI</Badge>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              {/* Cloud & DevOps */}
-              <Card className="p-8 gradient-backend-scale border-primary/20">
-                <Cloud className="w-12 h-12 text-primary mb-6" />
-                <h3 className="text-2xl font-bold mb-4">Cloud & Performance</h3>
-                <p className="text-muted-foreground mb-6">
-                  Extensive experience with cloud platforms and performance optimization. 
-                  Achieved 20x performance improvements through systematic optimization.
-                </p>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Cloud Platforms</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">AWS</Badge>
-                      <Badge variant="secondary">S3</Badge>
-                      <Badge variant="secondary">SQS</Badge>
-                      <Badge variant="secondary">SNS</Badge>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Message Queues</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">Kafka</Badge>
-                      <Badge variant="secondary">Thread Pools</Badge>
-                      <Badge variant="secondary">Async Processing</Badge>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Tools</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="secondary">Git/GitHub</Badge>
-                      <Badge variant="secondary">Docker</Badge>
-                      <Badge variant="secondary">Monitoring</Badge>
-                      <Badge variant="secondary">Performance</Badge>
-                    </div>
-                  </div>
-                </div>
-              </Card>
+                  </Card>
+                );
+              })}
             </div>
           </motion.div>
 
@@ -299,22 +175,30 @@ export default function About() {
           >
             <Card className="p-12 gradient-backend-scale border-primary/20 max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold mb-8">
-                Engineering Philosophy: <span className="text-primary">Scale meets Intelligence</span>
+                {aboutContent.philosophy.title}<span className="text-primary">{aboutContent.philosophy.titleHighlight}</span>
               </h2>
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                I believe the future belongs to engineers who can build systems that are not just scalable, 
-                but intelligent. My journey from IIIT Jabalpur to processing 700+ crores monthly has taught me 
-                that true innovation happens at the intersection of robust backend engineering and cutting-edge AI.
+                {aboutContent.philosophy.description}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gradient-purple-ai text-white hover:opacity-90">
-                  <ExternalLink className="w-5 h-5 mr-2" />
-                  View My Projects
-                </Button>
-                <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                  <Code2 className="w-5 h-5 mr-2" />
-                  See Experience
-                </Button>
+                {aboutContent.philosophy.buttons.map((button, index) => {
+                  const IconComponent = index === 0 ? ExternalLink : Code2;
+                  return button.primary ? (
+                    <Button key={button.text} size="lg" className="gradient-purple-ai text-white hover:opacity-90" asChild>
+                      <Link href={button.href}>
+                        <IconComponent className="w-5 h-5 mr-2" />
+                        {button.text}
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button key={button.text} size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground" asChild>
+                      <Link href={button.href}>
+                        <IconComponent className="w-5 h-5 mr-2" />
+                        {button.text}
+                      </Link>
+                    </Button>
+                  );
+                })}
               </div>
             </Card>
           </motion.div>

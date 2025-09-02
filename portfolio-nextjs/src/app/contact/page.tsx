@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { contactContent } from "@/content/contact";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
