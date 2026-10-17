@@ -18,7 +18,7 @@ const CONFIG = {
   bride: {
     first: "Muskan",
     full: "Muskan Mittal",
-    grandparents: "Gr/D/o Lt. Mrs. Gini Devi & Lt. Mr. Bishamber Dayal Agarwal",
+    grandparents: "Gr/D/o Lt. Mrs. Chadrapati Devi & Lt. Mr. Bishamber Dayal Agarwal",
     parents: "D/o Mrs. Vinita & Mr. Raj Kumar Agarwal",
   },
   initials: "T&M",
@@ -28,9 +28,9 @@ const CONFIG = {
   closingMessage:
     "With hearts full of love and joy, we warmly invite you to celebrate our special day and bless us as we begin our forever together. ❤️",
   regards: "Khetan Family",
+  instagram: "https://www.instagram.com/soulful_tm/",
 
   // The hero date and countdown use the event marked `main: true`.
-  // `end` is optional; it is only used for "Add to Calendar" (defaults to 3 hours after start).
   events: [
     {
       id: "mayra",
@@ -39,7 +39,7 @@ const CONFIG = {
       date: "2026-12-01",
       start: "11:00",
       ...VENUE,
-      theme: { bg1: "#f28c28", bg2: "#8f2d0b", accent: "#ffe2a3", ink: "#fff6e8", card: "rgba(0,0,0,0.22)", btnInk: "#6b1f05" },
+      theme: { bg1: "#9b3a8c", bg2: "#3b0a3a", accent: "#f5cf7a", ink: "#fdf3fb", card: "rgba(0,0,0,0.25)", btnInk: "#3b0a3a" },
     },
     {
       id: "sangeet",
@@ -47,7 +47,6 @@ const CONFIG = {
       tagline: "An evening of song, dance & celebration",
       date: "2026-12-01",
       start: "19:15",
-      end: "23:30",
       ...VENUE,
       theme: { bg1: "#4b2391", bg2: "#170833", accent: "#f7c873", ink: "#f7efff", card: "rgba(0,0,0,0.28)", btnInk: "#170833" },
     },
@@ -66,7 +65,6 @@ const CONFIG = {
       tagline: "The groom sets out with music & dhol",
       date: "2026-12-02",
       start: "17:30",
-      end: "19:00",
       main: true,
       ...VENUE,
       theme: { bg1: "#a3172b", bg2: "#3d040d", accent: "#f3cf6b", ink: "#fdf6e3", card: "rgba(0,0,0,0.25)", btnInk: "#3d040d" },
@@ -77,17 +75,15 @@ const CONFIG = {
       tagline: "Dinner, dancing & celebrations",
       date: "2026-12-02",
       start: "19:00",
-      end: "23:30",
       ...VENUE,
       theme: { bg1: "#16305e", bg2: "#040a1a", accent: "#d9b45a", ink: "#eef2ff", card: "rgba(255,255,255,0.06)", btnInk: "#040a1a" },
     },
   ],
 
-  rsvp: {
-    name: "Sanjay Khetan",
-    phones: ["+91 9334209666", "+91 9660744867"],
-    whatsapp: "919334209666", // country code + number, digits only
-  },
+  contacts: [
+    { name: "Sanjay Khetan", phone: "+91 9334209666" },
+    { name: "Tarang Khetan", phone: "+91 9660744867" },
+  ],
 };
 
 /* ========================================================= */
@@ -109,21 +105,6 @@ function formatTime(hhmm) {
   return `${h}:${String(m).padStart(2, "0")} ${suffix}`;
 }
 
-function calendarLink(ev) {
-  const stamp = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-  const start = toDate(ev.date, ev.start);
-  let end = ev.end ? toDate(ev.date, ev.end) : new Date(start.getTime() + 3 * 36e5);
-  if (end <= start) end = new Date(end.getTime() + 864e5); // runs past midnight
-  const params = new URLSearchParams({
-    action: "TEMPLATE",
-    text: `${ev.name} · ${CONFIG.groom.first} & ${CONFIG.bride.first}`,
-    dates: `${stamp(start)}/${stamp(end)}`,
-    location: `${ev.venue}, ${ev.address}`,
-    details: `${ev.name} at ${CONFIG.groom.full} & ${CONFIG.bride.full}'s wedding celebrations`,
-  });
-  return `https://calendar.google.com/calendar/render?${params}`;
-}
-
 function mandalaSVG() {
   let petals = "";
   for (let i = 0; i < 16; i++) {
@@ -140,7 +121,7 @@ function mandalaSVG() {
 
 /* ---------- Render content ---------- */
 function render() {
-  const { groom, bride, rsvp } = CONFIG;
+  const { groom, bride, contacts } = CONFIG;
   document.title = `${groom.first} & ${bride.first} · Wedding Invitation`;
   const fill = (attr, text) => $$(`[${attr}]`).forEach((el) => (el.textContent = text));
   fill("data-groom", groom.first);
@@ -157,14 +138,22 @@ function render() {
   fill("data-date-short", formatDate(mainEvent.date, { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, " · "));
   fill("data-closing", CONFIG.closingMessage);
   fill("data-regards", CONFIG.regards);
-  fill("data-rsvp-name", rsvp.name);
+  $("#instagram").href = CONFIG.instagram;
+  fill("data-instagram-handle", "@" + CONFIG.instagram.split("/").filter(Boolean).pop());
 
-  $("[data-rsvp-phones]").innerHTML = rsvp.phones
-    .map((p) => `<a href="tel:${p.replace(/\s/g, "")}">${p}</a>`)
+  const digits = (p) => p.replace(/\D/g, "");
+  $("[data-contacts]").innerHTML = contacts
+    .map(
+      (c) => `
+      <div class="contact">
+        <span class="contact-name">${c.name}</span>
+        <a class="contact-phone" href="tel:+${digits(c.phone)}">${c.phone}</a>
+        <a class="call-btn" href="tel:+${digits(c.phone)}" aria-label="Call ${c.name}">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+        </a>
+      </div>`
+    )
     .join("");
-  const msg = `Hi! We're delighted to confirm our presence at ${groom.first} & ${bride.first}'s wedding. Number of guests: `;
-  $("#rsvp-whatsapp").href = `https://wa.me/${rsvp.whatsapp}?text=${encodeURIComponent(msg)}`;
-  $("#rsvp-call").href = `tel:${rsvp.phones[0].replace(/\s/g, "")}`;
 
   const total = CONFIG.events.length;
   $("#events").outerHTML = CONFIG.events
@@ -176,7 +165,7 @@ function render() {
         <div class="mandala" aria-hidden="true">${mandalaSVG()}</div>
         <article class="event-card reveal">
           <p class="event-count">Celebration ${i + 1} of ${total}</p>
-          <h2 class="event-name${ev.name.length > 14 ? " long" : ""}">${ev.name}</h2>
+          <h2 class="event-name${ev.name.length > 10 ? " long" : ""}">${ev.name}</h2>
           <p class="event-tagline">${ev.tagline}</p>
           <div class="divider"><span></span></div>
           <ul class="event-details">
@@ -186,7 +175,6 @@ function render() {
           </ul>
           <div class="actions">
             <a class="btn" href="${ev.map}" target="_blank" rel="noopener">View on Map</a>
-            <a class="btn ghost" href="${calendarLink(ev)}" target="_blank" rel="noopener">Add to Calendar</a>
           </div>
         </article>
       </section>`;
@@ -399,6 +387,78 @@ function setupScroll() {
   });
 }
 
+/* ---------- Reel ---------- */
+// Plays muted while in view. Turning its sound on pauses the background
+// music, which comes back when the reel is muted or scrolled away from.
+function setupReel() {
+  const video = $("#reel");
+  if (!video) return;
+  const wrap = $(".reel-wrap");
+  const btn = $("#reelSound");
+  const fullBtn = $("#reelFull");
+  const label = $("span", btn);
+  let resumeMusic = false;
+
+  const setMuted = (muted) => {
+    video.muted = muted;
+    btn.classList.toggle("on", !muted);
+    btn.setAttribute("aria-label", muted ? "Turn sound on" : "Turn sound off");
+    label.textContent = muted ? "Tap for sound" : "Sound on";
+  };
+  const unmute = () => {
+    resumeMusic = Music.playing;
+    if (Music.playing) Music.pause();
+    setMuted(false);
+    video.play().catch(() => {});
+  };
+  const mute = () => {
+    if (video.muted) return;
+    setMuted(true);
+    if (resumeMusic) Music.play();
+    resumeMusic = false;
+  };
+  const toggle = () => (video.muted ? unmute() : mute());
+
+  btn.addEventListener("click", toggle);
+  video.addEventListener("click", toggle);
+
+  // Full screen: the whole frame where supported (keeps our buttons),
+  // otherwise the native player (iPhone). Sound turns on when entering.
+  const fsElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const isFullscreen = () => !!fsElement() || video.webkitDisplayingFullscreen;
+  fullBtn.addEventListener("click", () => {
+    if (fsElement()) return (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    if (video.muted) unmute();
+    if (wrap.requestFullscreen) wrap.requestFullscreen().catch(() => {});
+    else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+  });
+  const onFsChange = () => {
+    const on = fsElement() === wrap;
+    wrap.classList.toggle("fs", on);
+    fullBtn.setAttribute("aria-label", on ? "Exit full screen" : "Full screen");
+  };
+  document.addEventListener("fullscreenchange", onFsChange);
+  document.addEventListener("webkitfullscreenchange", onFsChange);
+  video.addEventListener("webkitendfullscreen", () => video.play().catch(() => {})); // iPhone pauses on exit
+
+  // Background music turned back on by hand: silence the reel.
+  Music.btn.addEventListener("click", () => {
+    if (Music.playing && !video.muted) { resumeMusic = false; setMuted(true); }
+  });
+
+  new IntersectionObserver(
+    ([entry]) => {
+      if (isFullscreen()) return; // layout shifts while full screen; ignore
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else { video.pause(); mute(); }
+    },
+    { root: $("#scroller"), threshold: 0.5 }
+  ).observe(video);
+
+  document.addEventListener("visibilitychange", () => document.hidden && video.pause());
+}
+
 /* ---------- Opening sequence ---------- */
 function setupIntro() {
   const intro = $("#intro");
@@ -436,6 +496,7 @@ startCountdown();
 setupScroll();
 setupIntro();
 Music.btn.addEventListener("click", () => Music.toggle());
+setupReel();
 
 // Pause when the tab is hidden, resume when it comes back.
 let resumeOnShow = false;
