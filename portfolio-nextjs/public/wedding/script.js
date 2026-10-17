@@ -27,8 +27,8 @@ const CONFIG = {
     fullHi: "तरंग खेतान",
     grandparents: "Gr/S/o Late Mrs. Sita Devi & Late Mr. Santulal Khetan",
     grandparentsHi: "पौत्र — स्व. श्रीमती सीता देवी एवं स्व. श्री संतूलाल खेतान",
-    parents: "S/o Mrs. Sheela & Mr. Sanjay Khetan",
-    parentsHi: "सुपुत्र — श्रीमती शीला एवं श्री संजय खेतान",
+    parents: "S/o Mrs. Sheela Khetan & Mr. Sanjay Khetan",
+    parentsHi: "सुपुत्र — श्रीमती शीला खेतान एवं श्री संजय खेतान",
   },
   bride: {
     first: "Muskan",
@@ -37,8 +37,8 @@ const CONFIG = {
     fullHi: "मुस्कान मित्तल",
     grandparents: "Gr/D/o Late Mrs. Chadrapati Devi & Late Mr. Bishamber Dayal Agarwal",
     grandparentsHi: "पौत्री — स्व. श्रीमती चन्द्रपति देवी एवं स्व. श्री बिशम्बर दयाल अग्रवाल",
-    parents: "D/o Mrs. Vinita & Mr. Raj Kumar Agarwal",
-    parentsHi: "सुपुत्री — श्रीमती विनीता एवं श्री राज कुमार अग्रवाल",
+    parents: "D/o Mrs. Vinita Agarwal & Mr. Raj Kumar Agarwal",
+    parentsHi: "सुपुत्री — श्रीमती विनीता अग्रवाल एवं श्री राज कुमार अग्रवाल",
   },
   initials: "T&M",
   city: "Ranchi, Jharkhand",
@@ -53,7 +53,10 @@ const CONFIG = {
   regardsHi: "खेतान परिवार",
   instagram: "https://www.instagram.com/soulful_tm/",
 
-  // The hero date and countdown use the event marked `main: true`.
+  // The countdown runs to this moment (local time in `timezone`); fireworks start once it's reached.
+  countdownTo: { date: "2026-12-02", time: "23:00" },
+
+  // The hero date uses the event marked `main: true`.
   events: [
     {
       id: "mayra",
@@ -161,7 +164,7 @@ const STRINGS = {
     invited: "You are cordially invited",
     families: "Together with their families",
     tapSeal: "Tap the seal to open",
-    invocation: "॥ Shri Ganeshaya Namah ॥",
+    invocation: "॥ श्री गणेशाय नमः ॥", // shown in Hindi in both languages
     inviteLine: "request the pleasure of your company<br />as they begin their journey together",
     days: "Days", hours: "Hours", mins: "Minutes", secs: "Seconds",
     married: "Just Married!",
@@ -355,16 +358,114 @@ function setupLang() {
 }
 
 /* ---------- Countdown ---------- */
+// Add ?celebrate to the URL to preview the after-countdown fireworks.
+const celebratePreview = new URLSearchParams(location.search).has("celebrate");
+
+/* ---------- Fireworks (after the countdown ends) ---------- */
+// Canvas fireworks over the Home page. They only run while Home is on screen
+// and the tab is visible, so they never drain a phone in the background.
+const Fireworks = {
+  canvas: null,
+  started: false,
+  running: false,
+  start() {
+    if (this.started || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    this.started = true;
+    const c = (this.canvas = document.createElement("canvas"));
+    c.className = "fireworks";
+    c.setAttribute("aria-hidden", "true");
+    $("#home").appendChild(c);
+    this.ctx = c.getContext("2d");
+    this.rockets = [];
+    this.sparks = [];
+    this.nextLaunch = 0;
+    const resize = () => {
+      const r = c.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+      c.width = r.width * dpr;
+      c.height = r.height * dpr;
+      this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      this.w = r.width;
+      this.h = r.height;
+    };
+    resize();
+    addEventListener("resize", resize);
+    let onScreen = true;
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; this.toggle(onScreen && !document.hidden); },
+      { root: $("#scroller"), threshold: 0.2 }).observe($("#home"));
+    document.addEventListener("visibilitychange", () => this.toggle(onScreen && !document.hidden));
+    this.toggle(true);
+  },
+  toggle(on) {
+    if (on && !this.running) { this.running = true; this.last = performance.now(); requestAnimationFrame((t) => this.frame(t)); }
+    if (!on) this.running = false;
+  },
+  launch() {
+    const hue = [40, 44, 348, 335, 15, 40][Math.floor(Math.random() * 6)];
+    this.rockets.push({
+      x: this.w * (0.15 + Math.random() * 0.7), y: this.h,
+      vx: (Math.random() - 0.5) * 40, vy: -(this.h * (0.9 + Math.random() * 0.35)),
+      targetY: this.h * (0.12 + Math.random() * 0.33), hue,
+    });
+  },
+  burst(r) {
+    const n = 70 + Math.floor(Math.random() * 40);
+    const speed = 90 + Math.random() * 90;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + Math.random() * 0.1;
+      const v = speed * (0.6 + Math.random() * 0.4);
+      this.sparks.push({
+        x: r.x, y: r.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v,
+        life: 1, decay: 0.45 + Math.random() * 0.35,
+        hue: r.hue + (Math.random() - 0.5) * 16, light: 38 + Math.random() * 18, px: r.x, py: r.y,
+      });
+    }
+  },
+  frame(now) {
+    if (!this.running) return;
+    const dt = Math.min((now - this.last) / 1000, 0.05);
+    this.last = now;
+    if (now > this.nextLaunch) { this.launch(); this.nextLaunch = now + 500 + Math.random() * 900; }
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, this.w, this.h);
+    this.rockets = this.rockets.filter((r) => {
+      r.x += r.vx * dt;
+      r.y += r.vy * dt;
+      r.vy += 220 * dt;
+      ctx.fillStyle = `hsla(${r.hue},85%,45%,0.95)`;
+      ctx.beginPath(); ctx.arc(r.x, r.y, 2.4, 0, 7); ctx.fill();
+      if (r.y <= r.targetY || r.vy >= 0) { this.burst(r); return false; }
+      return true;
+    });
+    this.sparks = this.sparks.filter((p) => {
+      p.vx *= 0.985; p.vy = p.vy * 0.985 + 60 * dt;
+      p.px = p.x; p.py = p.y;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      p.life -= p.decay * dt;
+      if (p.life <= 0) return false;
+      // short trail + spark head, in rich tones that show on the cream card
+      ctx.strokeStyle = `hsla(${p.hue},90%,${p.light}%,${p.life * 0.55})`;
+      ctx.lineWidth = 1.6 * p.life + 0.4;
+      ctx.beginPath(); ctx.moveTo(p.px - p.vx * 0.05, p.py - p.vy * 0.05); ctx.lineTo(p.x, p.y); ctx.stroke();
+      const twinkle = Math.random() < 0.15 ? 1.6 : 1;
+      ctx.fillStyle = `hsla(${p.hue},95%,${p.light}%,${p.life})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, (2 * p.life + 0.7) * twinkle, 0, 7); ctx.fill();
+      return true;
+    });
+    requestAnimationFrame((t) => this.frame(t));
+  },
+};
+
 function startCountdown() {
-  const target = toDate(mainEvent.date, mainEvent.start).getTime();
+  const target = toDate(CONFIG.countdownTo.date, CONFIG.countdownTo.time).getTime();
   const box = $("#countdown");
   const els = { d: $("#cd-days"), h: $("#cd-hours"), m: $("#cd-mins"), s: $("#cd-secs") };
   const tick = () => {
-    const diff = target - Date.now();
+    const diff = celebratePreview ? 0 : target - Date.now();
     if (diff <= 0) {
       box.classList.add("married");
       box.textContent = t("married");
       clearInterval(timer);
+      Fireworks.start();
       return;
     }
     els.d.textContent = Math.floor(diff / 864e5);
@@ -731,6 +832,239 @@ function drawEnvelope() {
   });
 }
 
+/* ---------- Seal crack: sound + gold dust ---------- */
+// A short, soft "crack" made with Web Audio (no audio file needed).
+function playCrack() {
+  const ctx = Synth.ctx;
+  if (!ctx) return;
+  ctx.resume();
+  const t = ctx.currentTime + 0.03;
+  const len = Math.floor(ctx.sampleRate * 0.12);
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+  const noise = ctx.createBufferSource();
+  noise.buffer = buf;
+  const band = ctx.createBiquadFilter();
+  band.type = "bandpass";
+  band.frequency.value = 1800;
+  band.Q.value = 0.9;
+  const g = ctx.createGain();
+  g.gain.value = 0.35;
+  noise.connect(band).connect(g).connect(ctx.destination);
+  noise.start(t);
+  // a low, soft thud underneath
+  const o = ctx.createOscillator();
+  const og = ctx.createGain();
+  o.frequency.setValueAtTime(140, t);
+  o.frequency.exponentialRampToValueAtTime(60, t + 0.12);
+  og.gain.setValueAtTime(0.25, t);
+  og.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  o.connect(og).connect(ctx.destination);
+  o.start(t);
+  o.stop(t + 0.2);
+}
+
+// Gold sparkles bursting out of the seal as it breaks.
+function goldDust() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const envelope = $("#envelope");
+  const c = document.createElement("canvas");
+  c.className = "gold-dust";
+  envelope.appendChild(c);
+  const rect = envelope.getBoundingClientRect();
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  c.width = rect.width * dpr;
+  c.height = rect.height * dpr;
+  const ctx = c.getContext("2d");
+  ctx.scale(dpr, dpr);
+  const seal = $(".seal").getBoundingClientRect();
+  const cx = seal.left + seal.width / 2 - rect.left, cy = seal.top + seal.height / 2 - rect.top;
+  const bits = [];
+  for (let i = 0; i < 110; i++) {
+    const a = Math.random() * Math.PI * 2, v = 60 + Math.random() * 230;
+    bits.push({
+      x: cx + Math.cos(a) * seal.width * 0.2, y: cy + Math.sin(a) * seal.height * 0.2,
+      vx: Math.cos(a) * v, vy: Math.sin(a) * v - 60,
+      r: 0.8 + Math.random() * 2.2, life: 1, decay: 0.55 + Math.random() * 0.5,
+      light: 55 + Math.random() * 30, tw: Math.random() * 6,
+    });
+  }
+  let last = performance.now();
+  const frame = (now) => {
+    const dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    let alive = 0;
+    for (const b of bits) {
+      if (b.life <= 0) continue;
+      alive++;
+      b.vx *= 0.96; b.vy = b.vy * 0.96 + 40 * dt;
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      b.life -= b.decay * dt;
+      const flicker = 0.6 + 0.4 * Math.sin(now / 60 + b.tw);
+      ctx.fillStyle = `hsla(43, 85%, ${b.light}%, ${Math.max(b.life, 0) * flicker})`;
+      ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7); ctx.fill();
+    }
+    if (alive) requestAnimationFrame(frame);
+    else c.remove();
+  };
+  requestAnimationFrame(frame);
+}
+
+/* ---------- Hidden hearts ---------- */
+// Tap the couple's names three times on the Home page for a shower of hearts and
+// flowers. They pile up at the bottom, and when the phone is tilted they slide and
+// tumble towards whichever side is lower, bumping into each other (simple physics).
+function setupHearts() {
+  const home = $("#home");
+  const names = $("#home .names");
+  const glyphs = ["❤", "❤", "❥", "✿", "❀"];
+  const colors = ["#c9184a", "#e05780", "#b8862b", "#d9b45a", "#8a1c2b"];
+  const G = 1400; // px/s²
+  const gravity = { x: 0, y: G };
+  const bits = [];
+  let canvas, ctx, w = 0, h = 0, running = false, onScreen = true, last = 0, calm = 0;
+  let taps = [];
+
+  const resize = () => {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    w = home.clientWidth; h = home.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+
+  const ensureCanvas = () => {
+    if (canvas) return;
+    canvas = document.createElement("canvas");
+    canvas.className = "heart-pile";
+    canvas.setAttribute("aria-hidden", "true");
+    home.appendChild(canvas);
+    ctx = canvas.getContext("2d");
+    resize();
+    addEventListener("resize", resize);
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; wake(); },
+      { root: $("#scroller"), threshold: 0.1 }).observe(home);
+    document.addEventListener("visibilitychange", wake);
+  };
+
+  // Phone tilt -> direction of gravity. iPhones ask the guest for permission first.
+  let tiltOn = false;
+  const onTilt = (e) => {
+    if (e.beta == null || e.gamma == null) return;
+    const rad = Math.PI / 180;
+    const angle = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+    let gx = Math.sin(e.gamma * rad), gy = Math.sin(Math.max(-90, Math.min(90, e.beta)) * rad);
+    if (angle === 90) [gx, gy] = [gy, -gx];
+    else if (angle === -90 || angle === 270) [gx, gy] = [-gy, gx];
+    else if (angle === 180) [gx, gy] = [-gx, -gy];
+    const nx = gx * G, ny = gy * G;
+    if (Math.abs(nx - gravity.x) + Math.abs(ny - gravity.y) > 60) wake();
+    gravity.x = nx; gravity.y = ny;
+  };
+  const enableTilt = () => {
+    if (tiltOn || !("DeviceOrientationEvent" in window)) return;
+    tiltOn = true;
+    const listen = () => addEventListener("deviceorientation", onTilt);
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      DeviceOrientationEvent.requestPermission().then((r) => r === "granted" && listen()).catch(() => {});
+    } else listen();
+  };
+
+  const spawn = () => {
+    for (let i = 0; i < 40; i++) {
+      const r = 7 + Math.random() * 10;
+      bits.push({
+        x: r + Math.random() * (w - 2 * r), y: -r - Math.random() * 240,
+        vx: (Math.random() - 0.5) * 60, vy: Math.random() * 80,
+        r, rot: Math.random() * 6.3, vr: 0,
+        glyph: glyphs[i % glyphs.length], color: colors[Math.floor(Math.random() * colors.length)],
+        inside: false,
+      });
+    }
+    while (bits.length > 200) bits.shift();
+    wake();
+  };
+
+  const step = (dt) => {
+    for (const b of bits) {
+      b.vx += gravity.x * dt; b.vy += gravity.y * dt;
+      b.vx *= 0.995; b.vy *= 0.995;
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      b.rot += b.vr * dt; b.vr *= 0.97;
+      if (b.y > b.r) b.inside = true;
+      // walls (the top only counts once a piece has fallen in)
+      if (b.x < b.r) { b.x = b.r; b.vx *= -0.3; b.vr += b.vy * 0.01; }
+      if (b.x > w - b.r) { b.x = w - b.r; b.vx *= -0.3; b.vr -= b.vy * 0.01; }
+      if (b.y > h - b.r) { b.y = h - b.r; b.vy *= -0.25; b.vx *= 0.9; b.vr += b.vx * 0.02; }
+      if (b.inside && b.y < b.r) { b.y = b.r; b.vy *= -0.25; b.vx *= 0.9; }
+    }
+    // pieces push each other apart so they stack instead of overlapping
+    for (let pass = 0; pass < 2; pass++) {
+      for (let i = 0; i < bits.length; i++) {
+        const a = bits[i];
+        for (let j = i + 1; j < bits.length; j++) {
+          const c = bits[j];
+          const dx = c.x - a.x, dy = c.y - a.y, min = (a.r + c.r) * 0.85;
+          if (Math.abs(dx) > min || Math.abs(dy) > min) continue;
+          const d2 = dx * dx + dy * dy;
+          if (d2 >= min * min || d2 === 0) continue;
+          const d = Math.sqrt(d2), push = (min - d) / 2, nx = dx / d, ny = dy / d;
+          a.x -= nx * push; a.y -= ny * push; c.x += nx * push; c.y += ny * push;
+          const rel = (c.vx - a.vx) * nx + (c.vy - a.vy) * ny;
+          if (rel < 0) {
+            const imp = rel * 0.6;
+            a.vx += imp * nx; a.vy += imp * ny; c.vx -= imp * nx; c.vy -= imp * ny;
+          }
+        }
+      }
+    }
+  };
+
+  const draw = () => {
+    ctx.clearRect(0, 0, w, h);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (const b of bits) {
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(b.rot);
+      ctx.fillStyle = b.color;
+      ctx.font = `${b.r * 2.1}px serif`;
+      ctx.fillText(b.glyph, 0, 0);
+      ctx.restore();
+    }
+  };
+
+  const frame = (now) => {
+    if (!running) return;
+    const dt = Math.min((now - last) / 1000, 1 / 30);
+    last = now;
+    step(dt / 2); step(dt / 2);
+    draw();
+    // go to sleep once everything has settled, to save battery
+    const fast = bits.some((b) => Math.abs(b.vx) + Math.abs(b.vy) > 12);
+    calm = fast ? 0 : calm + dt;
+    if (calm > 0.8 || !onScreen || document.hidden) { running = false; return; }
+    requestAnimationFrame(frame);
+  };
+  function wake() {
+    if (running || !canvas || !bits.length || !onScreen || document.hidden) return;
+    running = true; calm = 0; last = performance.now();
+    requestAnimationFrame(frame);
+  }
+
+  names.addEventListener("click", () => {
+    const now = Date.now();
+    taps = taps.filter((t) => now - t < 1200).concat(now);
+    if (taps.length < 3) return;
+    taps = [];
+    ensureCanvas();
+    enableTilt(); // called inside the tap, as iPhones require
+    spawn();
+  });
+}
+
 /* ---------- Opening sequence ---------- */
 function setupIntro() {
   const intro = $("#intro");
@@ -741,10 +1075,12 @@ function setupIntro() {
     if (opened) return;
     opened = true;
     Music.start();
+    playCrack();
     intro.classList.add("opening");
     envelope.classList.add("open");
+    setTimeout(goldDust, 180);
 
-    setTimeout(() => intro.classList.add("zoom"), 1350);
+    setTimeout(() => intro.classList.add("zoom"), 1550);
     setTimeout(() => {
       intro.classList.add("done");
       document.body.classList.remove("locked");
@@ -752,8 +1088,8 @@ function setupIntro() {
       $("#dots").hidden = false;
       Music.btn.hidden = false;
       startPetals();
-    }, 2450);
-    setTimeout(() => intro.remove(), 3500);
+    }, 2650);
+    setTimeout(() => intro.remove(), 3700);
   };
 
   envelope.addEventListener("click", open);
@@ -763,6 +1099,7 @@ function setupIntro() {
 }
 
 /* ---------- Boot ---------- */
+setupHearts();
 drawEnvelope();
 $(".hero-mandala").innerHTML = mandalaSVG();
 buildEvents();

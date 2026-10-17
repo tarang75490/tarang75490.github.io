@@ -28,7 +28,7 @@ a { color: inherit; }
   position: fixed;
   inset: 0;
   z-index: 50;
-  background: #4a0b14;
+  background: #33070d;
   transition: opacity 0.9s ease, visibility 0.9s;
 }
 .intro.done { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -111,7 +111,7 @@ a { color: inherit; }
 /* all four flaps unfold together on the same timing */
 .flap-wrap, .env-flap {
   will-change: transform;
-  transition: transform 1.15s cubic-bezier(.6, .05, .3, 1) 0.15s;
+  transition: transform 1.15s cubic-bezier(.6, .05, .3, 1) 0.35s;
 }
 .flap-wrap { position: absolute; inset: 0; }
 .flap-wrap:nth-child(1) { transform-origin: left center; }
@@ -120,18 +120,29 @@ a { color: inherit; }
 .flap-wrap.side { filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.45)); }
 .flap-wrap.bottom { filter: drop-shadow(0 -5px 9px rgba(0, 0, 0, 0.5)); }
 .flap { position: absolute; inset: 0; overflow: hidden; }
+/* real crinkled-paper texture (free Pexels photo), blended into the maroon */
+.flap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url("assets/images/paper-crinkle.jpg") center / cover;
+  filter: grayscale(1) contrast(1.6);
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
 .flap .botanical { position: absolute; inset: 0; background: center / cover no-repeat; }
 .flap-left {
   clip-path: polygon(0 0, 50% calc(var(--tip) + 1%), 0 100%);
-  background: linear-gradient(90deg, #8a1c29, #741622);
+  background: linear-gradient(90deg, #5e121c, #4f0f18);
 }
 .flap-right {
   clip-path: polygon(100% 0, 50% calc(var(--tip) + 1%), 100% 100%);
-  background: linear-gradient(270deg, #8a1c29, #741622);
+  background: linear-gradient(270deg, #5e121c, #4f0f18);
 }
 .flap-bottom {
   clip-path: polygon(0 100%, 50% calc(var(--tip) - 2%), 100% 100%);
-  background: linear-gradient(0deg, #801a26, #942331);
+  background: linear-gradient(0deg, #55101a, #651620);
 }
 .env-flap {
   position: absolute;
@@ -144,7 +155,7 @@ a { color: inherit; }
   clip-path: polygon(0 0, 100% 0, 50% calc(var(--tip) + 2%));
   background:
     radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.07), transparent 60%),
-    linear-gradient(180deg, #a12a37, #8c1f2c);
+    linear-gradient(180deg, #701a25, #5f141f);
 }
 
 /* ivory wax seal */
@@ -158,7 +169,16 @@ a { color: inherit; }
   filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.55));
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
+.seal { aspect-ratio: 340 / 338; }
 .seal img { width: 100%; height: auto; display: block; }
+/* the seal is two halves of the same image, split along a jagged crack */
+.seal-half {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.9s cubic-bezier(.3, .1, .6, 1) 0.2s, opacity 0.7s ease 0.45s;
+}
+.seal-half.left { clip-path: polygon(0 0, 52% 0, 47% 17%, 55% 33%, 46% 50%, 54% 68%, 47% 85%, 51% 100%, 0 100%); }
+.seal-half.right { clip-path: polygon(52% 0, 100% 0, 100% 100%, 51% 100%, 47% 85%, 54% 68%, 46% 50%, 55% 33%, 47% 17%); }
 .envelope:focus-visible .seal { outline: 2px solid var(--gold-light); outline-offset: 4px; border-radius: 50%; }
 
 .intro-hint {
@@ -176,7 +196,17 @@ a { color: inherit; }
 .intro.opening .intro-hint { opacity: 0; animation: none; transition: opacity 0.4s; }
 
 /* open sequence: seal pops, top flap lifts, card rises, then fills the screen */
-.envelope.open .seal { transform: scale(1.5) rotate(20deg); opacity: 0; animation: none; }
+/* the seal shudders, cracks, and its halves fall away; then the flaps open */
+.envelope.open .seal { animation: sealCrack 0.22s ease-in-out; }
+.envelope.open .seal-half.left { transform: translate(-38%, 55%) rotate(-28deg); opacity: 0; }
+.envelope.open .seal-half.right { transform: translate(38%, 60%) rotate(24deg); opacity: 0; }
+@keyframes sealCrack {
+  0%, 100% { transform: none; }
+  25% { transform: rotate(-3deg) scale(1.03); }
+  60% { transform: rotate(3deg) scale(1.03); }
+}
+/* gold dust that bursts from the seal */
+.gold-dust { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 7; pointer-events: none; }
 .envelope.open .env-flap { transform: rotateX(180deg); }
 .envelope.open .flap-wrap:nth-child(1) { transform: rotateY(-180deg); }
 .envelope.open .flap-wrap:nth-child(2) { transform: rotateY(180deg); }
@@ -757,6 +787,11 @@ html[lang="hi"] .person-name,
 html[lang="hi"] .event-name,
 html[lang="hi"] .script-title { line-height: 1.4; }
 
+/* ================= Hidden hearts (tap the names three times) ================= */
+.hero .names { cursor: default; -webkit-tap-highlight-color: transparent; user-select: none; }
+/* hearts and flowers live on a canvas inside the Home page, behind the text */
+.heart-pile { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
 /* ================= Keyframes ================= */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
@@ -840,6 +875,8 @@ body:not(.locked) .hero::after { animation: sheen 2.2s ease-out 0.6s 1 both; }
 .corner.br { bottom: 4px; right: 4px; transform: scale(-1, -1); }
 
 .hero .invocation { color: #8a1c2b; }
+/* the invocation is always in Devanagari: no letter-spacing (it breaks conjuncts) */
+.invocation-hi { font-family: "Tiro Devanagari Hindi", var(--serif); letter-spacing: normal; text-transform: none; font-size: 1.05rem; }
 .hero .small-caps { color: var(--ink-soft); }
 .hero .names {
   color: transparent;
@@ -860,6 +897,8 @@ body:not(.locked) .hero::after { animation: sheen 2.2s ease-out 0.6s 1 both; }
 .hero .countdown b { color: #7a1424; }
 .hero .countdown span { color: var(--ink-soft); opacity: 1; }
 .hero .countdown.married { color: var(--foil); }
+.fireworks { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+#home .hero-content { position: relative; z-index: 2; }
 .hero .scroll-cue { color: #7a1424; opacity: 0.7; }
 
 /* lines appear one after another once the envelope opens */
