@@ -8,6 +8,12 @@ const VENUE = {
   map: "https://share.google/zkD2DEFbRsMNBRoNX",
 };
 
+const FAMILY_VENUE = {
+  venue: "Nand Niwas, Pawan Industries",
+  address: "Radha Marg, Agrasen Path, Upper Bazar, Ranchi, Jharkhand 834001",
+  map: "https://www.google.com/maps/place/Shree+Shyam+Mandir,+Agrasen+Marg,+Ranchi/@23.3701995,85.3148425,18.59z/data=!4m14!1m7!3m6!1s0x39f4e16d3eaefb4d:0xb233169bf6a1f09b!2sShree+Shyam+Mandir,+Harmu+Road,+RANCHI!8m2!3d23.3719925!4d85.3128086!16s%2Fg%2F11js_97ntc!3m5!1s0x39f4e102c68f36af:0xb24a68b19ed03ce!8m2!3d23.3709944!4d85.3153848!16s%2Fg%2F1pyqh90_5",
+};
+
 const CONFIG = {
   groom: {
     first: "Tarang",
@@ -80,6 +86,28 @@ const CONFIG = {
     },
   ],
 
+  // Shown only on the family link (/wedding/family/), before the main events.
+  familyEvents: [
+    {
+      id: "ganesh-puja",
+      name: "Ganesh Puja & Vyah Haath",
+      tagline: "Seeking Lord Ganesha's blessings to begin",
+      date: "2026-11-26",
+      start: "11:00",
+      ...FAMILY_VENUE,
+      theme: { bg1: "#f28c28", bg2: "#8f2d0b", accent: "#ffe2a3", ink: "#fff6e8", card: "rgba(0,0,0,0.22)", btnInk: "#6b1f05" },
+    },
+    {
+      id: "kirtan",
+      name: "Shri Shyam Ji Kirtan Night",
+      tagline: "An evening of bhajans & devotion",
+      date: "2026-11-29",
+      start: "04:00",
+      ...FAMILY_VENUE,
+      theme: { bg1: "#0f7c7a", bg2: "#053332", accent: "#f3cf6b", ink: "#eefcfa", card: "rgba(0,0,0,0.25)", btnInk: "#053332" },
+    },
+  ],
+
   contacts: [
     { name: "Sanjay Khetan", phone: "+91 9334209666" },
     { name: "Tarang Khetan", phone: "+91 9660744867" },
@@ -91,6 +119,8 @@ const CONFIG = {
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
+const isFamily = document.body.dataset.audience === "family";
+const allEvents = isFamily ? [...CONFIG.familyEvents, ...CONFIG.events] : CONFIG.events;
 const mainEvent = CONFIG.events.find((e) => e.main) || CONFIG.events[CONFIG.events.length - 1];
 const toDate = (date, time) => new Date(`${date}T${time}:00${CONFIG.tzOffset}`);
 
@@ -155,8 +185,8 @@ function render() {
     )
     .join("");
 
-  const total = CONFIG.events.length;
-  $("#events").outerHTML = CONFIG.events
+  const total = allEvents.length;
+  $("#events").outerHTML = allEvents
     .map((ev, i) => {
       const t = ev.theme;
       const style = `--bg1:${t.bg1};--bg2:${t.bg2};--accent:${t.accent};--ink:${t.ink};--card:${t.card};--btn-ink:${t.btnInk}`;
@@ -165,7 +195,7 @@ function render() {
         <div class="mandala" aria-hidden="true">${mandalaSVG()}</div>
         <article class="event-card reveal">
           <p class="event-count">Celebration ${i + 1} of ${total}</p>
-          <h2 class="event-name${ev.name.length > 10 ? " long" : ""}">${ev.name}</h2>
+          <h2 class="event-name${ev.name.length > 20 ? " long xlong" : ev.name.length > 10 ? " long" : ""}">${ev.name}</h2>
           <p class="event-tagline">${ev.tagline}</p>
           <div class="divider"><span></span></div>
           <ul class="event-details">

@@ -385,6 +385,7 @@ body:not(.locked) .scroller { opacity: 1; }
   color: var(--accent);
 }
 .event-name.long { font-size: clamp(2.4rem, 9.5vw, 3.4rem); }
+.event-name.xlong { font-size: clamp(2.1rem, 8.4vw, 3rem); }
 .event-tagline { font-style: italic; font-size: 1.15rem; opacity: 0.9; }
 
 .event-details {
