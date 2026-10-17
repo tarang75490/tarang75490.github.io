@@ -68,12 +68,12 @@ const CONFIG = {
     },
     {
       id: "sangeet",
-      name: "Sangeet Night",
+      name: "Sangeet Evening",
       nameHi: "संगीत संध्या",
       tagline: "An evening of song, dance & celebration",
       taglineHi: "गीत, नृत्य और उल्लास की एक शाम",
       date: "2026-12-01",
-      start: "19:15",
+      start: "18:00",
       ...VENUE,
       theme: { bg1: "#4b2391", bg2: "#170833", accent: "#f7c873", ink: "#f7efff", card: "rgba(0,0,0,0.28)", btnInk: "#170833" },
     },
@@ -128,7 +128,7 @@ const CONFIG = {
     },
     {
       id: "kirtan",
-      name: "Shri Shyam Ji Kirtan Night",
+      name: "Shri Shyam Ji Kirtan Evening",
       nameHi: "श्री श्याम जी कीर्तन संध्या",
       tagline: "An evening of bhajans & devotion",
       taglineHi: "भजनों और भक्ति की एक शाम",
