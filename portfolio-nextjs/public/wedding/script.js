@@ -914,8 +914,7 @@ function goldDust() {
 
 /* ---------- Hidden hearts ---------- */
 // Tap the couple's names three times on the Home page for a shower of hearts and
-// flowers. They pile up at the bottom, and when the phone is tilted they slide and
-// tumble towards whichever side is lower, bumping into each other (simple physics).
+// flowers that fall and pile up along the bottom, bumping into each other (simple physics).
 function setupHearts() {
   const home = $("#home");
   const names = $("#home .names");
@@ -947,29 +946,6 @@ function setupHearts() {
     new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; wake(); },
       { root: $("#scroller"), threshold: 0.1 }).observe(home);
     document.addEventListener("visibilitychange", wake);
-  };
-
-  // Phone tilt -> direction of gravity. iPhones ask the guest for permission first.
-  let tiltOn = false;
-  const onTilt = (e) => {
-    if (e.beta == null || e.gamma == null) return;
-    const rad = Math.PI / 180;
-    const angle = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
-    let gx = Math.sin(e.gamma * rad), gy = Math.sin(Math.max(-90, Math.min(90, e.beta)) * rad);
-    if (angle === 90) [gx, gy] = [gy, -gx];
-    else if (angle === -90 || angle === 270) [gx, gy] = [-gy, gx];
-    else if (angle === 180) [gx, gy] = [-gx, -gy];
-    const nx = gx * G, ny = gy * G;
-    if (Math.abs(nx - gravity.x) + Math.abs(ny - gravity.y) > 60) wake();
-    gravity.x = nx; gravity.y = ny;
-  };
-  const enableTilt = () => {
-    if (tiltOn || !("DeviceOrientationEvent" in window)) return;
-    tiltOn = true;
-    const listen = () => addEventListener("deviceorientation", onTilt);
-    if (typeof DeviceOrientationEvent.requestPermission === "function") {
-      DeviceOrientationEvent.requestPermission().then((r) => r === "granted" && listen()).catch(() => {});
-    } else listen();
   };
 
   const spawn = () => {
@@ -1070,7 +1046,6 @@ function setupHearts() {
     if (taps.length < 3) return;
     taps = [];
     ensureCanvas();
-    enableTilt(); // called inside the tap, as iPhones require
     spawn();
   });
 }
