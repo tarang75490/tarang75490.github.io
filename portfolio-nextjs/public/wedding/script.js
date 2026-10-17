@@ -567,31 +567,101 @@ const Synth = {
   },
 };
 
+// Two songs crossfade forever: near the end of each, it fades away while the
+// other rises in underneath, with no gap. Volume runs through Web Audio gain
+// nodes because iPhones ignore <audio>.volume.
 const Music = {
-  audio: $("#bgm"),
   btn: $("#musicBtn"),
   mode: null, // "file" | "synth"
   playing: false,
-  // Songs alternate: 1, 2, 1, 2, ...
-  playlist: ["assets/music/background.m4a?v=2", "assets/music/background-2.m4a?v=2"],
-  track: 0,
+  FADE: 3, // seconds of overlap between songs
+  VOL: 0.6,
+  ctx: undefined,
 
   init() {
-    this.audio.addEventListener("ended", () => {
-      this.track = (this.track + 1) % this.playlist.length;
-      this.audio.src = this.playlist[this.track];
-      if (this.playing) this.audio.play().catch(() => {});
+    this.players = [$("#bgm"), $("#bgm2")]; // player i always plays song i
+    this.current = 0;
+    this.active = new Set();
+    this.crossing = false;
+    this.players.forEach((el, i) => {
+      el.addEventListener("ended", () => {
+        this.active.delete(el);
+        if (i !== this.current) this.crossing = false; // the old song finished fading out
+        else if (this.playing) this.startTrack(1 - i, 0.5).catch(() => {}); // safety net
+      });
     });
+  },
+  // Must run inside the tap (user gesture).
+  setupGraph() {
+    if (this.ctx !== undefined) return;
+    this.ctx = null;
+    // iPhones mute Web Audio when the silent switch is on unless it's marked as playback.
+    try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch {}
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    try {
+      const ctx = new AC();
+      this.gains = this.players.map((el) => {
+        const g = ctx.createGain();
+        g.gain.value = 0;
+        ctx.createMediaElementSource(el).connect(g).connect(ctx.destination);
+        return g;
+      });
+      this.ctx = ctx;
+    } catch { this.ctx = null; }
+  },
+  fade(i, to, secs) {
+    if (this.ctx) {
+      const g = this.gains[i].gain, t = this.ctx.currentTime;
+      g.cancelScheduledValues(t);
+      g.setValueAtTime(g.value, t);
+      g.linearRampToValueAtTime(to, t + secs);
+      return;
+    }
+    // fallback without Web Audio
+    const el = this.players[i], from = el.volume, t0 = performance.now();
+    clearInterval(el._fade);
+    el._fade = setInterval(() => {
+      const k = Math.min((performance.now() - t0) / (secs * 1000), 1);
+      el.volume = from + (to - from) * k;
+      if (k >= 1) clearInterval(el._fade);
+    }, 50);
+  },
+  startTrack(i, fadeIn) {
+    const el = this.players[i];
+    el.currentTime = 0;
+    if (!this.ctx) el.volume = 0;
+    this.current = i;
+    this.active.add(el);
+    const p = el.play();
+    this.fade(i, this.VOL, fadeIn);
+    return p;
+  },
+  tick() {
+    if (!this.playing || this.mode !== "file" || this.crossing) return;
+    const el = this.players[this.current];
+    if (!el.duration || isNaN(el.duration)) return;
+    if (el.duration - el.currentTime <= this.FADE) {
+      this.crossing = true;
+      this.fade(this.current, 0, this.FADE);           // this song fades away...
+      this.startTrack(1 - this.current, this.FADE).catch(() => {}); // ...while the next one rises
+    }
   },
 
   start() {
     // Prime Web Audio synchronously inside the tap (required by Safari/iOS).
     Synth.init();
-    if (this.audio.error) return this.useSynth();
-    this.audio.volume = 0.6;
-    this.audio.play().then(
-      () => { this.mode = "file"; this.setPlaying(true); Synth.ctx && Synth.ctx.suspend(); },
-      () => this.useSynth()
+    this.setupGraph();
+    if (this.ctx) this.ctx.resume();
+    if (this.players[0].error) return this.useSynth();
+    this.startTrack(0, 1.5).then(
+      () => {
+        this.mode = "file";
+        this.setPlaying(true);
+        Synth.ctx && Synth.ctx.suspend();
+        this.timer = setInterval(() => this.tick(), 200);
+      },
+      () => { this.active.clear(); this.useSynth(); }
     );
   },
   useSynth() {
@@ -600,14 +670,18 @@ const Music = {
     this.setPlaying(true);
   },
   play() {
-    if (this.mode === "file") this.audio.play();
-    else Synth.play();
+    if (this.mode === "file") {
+      if (this.ctx) this.ctx.resume();
+      this.active.forEach((el) => el.play().catch(() => {}));
+    } else Synth.play();
     this.setPlaying(true);
   },
   pause() {
     this.setPlaying(false);
-    if (this.mode === "file") this.audio.pause();
-    else Synth.pause();
+    if (this.mode === "file") {
+      this.active.forEach((el) => el.pause());
+      if (this.ctx) this.ctx.suspend(); // also freezes any fade in progress
+    } else Synth.pause();
   },
   toggle() { this.playing ? this.pause() : this.play(); },
   setPlaying(on) {
