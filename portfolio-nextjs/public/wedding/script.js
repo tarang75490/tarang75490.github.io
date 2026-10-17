@@ -573,7 +573,7 @@ const Music = {
   mode: null, // "file" | "synth"
   playing: false,
   // Songs alternate: 1, 2, 1, 2, ...
-  playlist: ["assets/music/background.m4a", "assets/music/background-2.m4a"],
+  playlist: ["assets/music/background.m4a?v=2", "assets/music/background-2.m4a?v=2"],
   track: 0,
 
   init() {
