@@ -5,7 +5,7 @@
 const VENUE = {
   venue: "The Langkawi Resort",
   address: "Bariatu, Ranchi, 834009",
-  map: "https://maps.google.com/?q=The+Langkawi+Resort+Bariatu+Ranchi",
+  map: "https://share.google/zkD2DEFbRsMNBRoNX",
 };
 
 const CONFIG = {
