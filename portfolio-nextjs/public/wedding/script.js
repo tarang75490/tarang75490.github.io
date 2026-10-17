@@ -143,7 +143,7 @@ const CONFIG = {
   ],
 
   contacts: [
-    { name: "Sanjay Khetan", nameHi: "संजय खेतान", phone: "+91 9334209666" },
+    { name: "Sanjay Khetan", nameHi: "संजय खेतान", phone: "+91 9431023228" },
     { name: "Tarang Khetan", nameHi: "तरंग खेतान", phone: "+91 9660744867" },
   ],
 };
