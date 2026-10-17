@@ -789,8 +789,26 @@ html[lang="hi"] .script-title { line-height: 1.4; }
 
 /* ================= Hidden hearts (tap the names three times) ================= */
 .hero .names { cursor: default; -webkit-tap-highlight-color: transparent; user-select: none; }
-/* hearts and flowers live on a canvas inside the Home page, behind the text */
-.heart-pile { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+/* hearts fall inside the Home page and settle in a heap along its bottom edge.
+   Transform/opacity-only animation, so the phone's GPU keeps it smooth. */
+.heart-pile { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.heart-pile i {
+  position: absolute;
+  top: -40px;
+  font-style: normal;
+  line-height: 1;
+  will-change: transform, opacity;
+  animation: heartFall var(--dur) cubic-bezier(.4, .05, .75, 1) var(--delay) both;
+}
+@keyframes heartFall {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  8% { opacity: 1; }
+  30% { transform: translate3d(calc(var(--drift) * -0.6), calc(var(--land) * 0.3), 0) rotate(calc(var(--spin) * 0.3)) scale(0.85); }
+  60% { transform: translate3d(calc(var(--drift) * 0.6), calc(var(--land) * 0.62), 0) rotate(calc(var(--spin) * 0.65)) scale(0.95); }
+  90% { transform: translate3d(var(--drift), var(--land), 0) rotate(var(--spin)) scale(1); }
+  95% { transform: translate3d(var(--drift), calc(var(--land) - 5px), 0) rotate(var(--spin)) scale(1); }
+  100% { transform: translate3d(var(--drift), var(--land), 0) rotate(var(--spin)) scale(1); opacity: 1; }
+}
 
 /* ================= Keyframes ================= */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }

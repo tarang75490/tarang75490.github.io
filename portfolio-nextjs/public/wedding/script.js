@@ -914,139 +914,49 @@ function goldDust() {
 
 /* ---------- Hidden hearts ---------- */
 // Tap the couple's names three times on the Home page for a shower of hearts and
-// flowers that fall and pile up along the bottom, bumping into each other (simple physics).
+// flowers that fall and pile up along the bottom of the page. Each shower adds to
+// the heap. Pure CSS transform animation, so it stays smooth on phones.
 function setupHearts() {
   const home = $("#home");
   const names = $("#home .names");
+  const pile = document.createElement("div");
+  pile.className = "heart-pile";
+  pile.setAttribute("aria-hidden", "true");
+  home.appendChild(pile);
   const glyphs = ["❤", "❤", "❥", "✿", "❀"];
   const colors = ["#c9184a", "#e05780", "#b8862b", "#d9b45a", "#8a1c2b"];
-  const G = 900; // px/s²
-  const MAX_FALL = 240; // px/s while falling: a light, quick fall (about 3 s top to bottom)
-  const gravity = { x: 0, y: G };
-  const bits = [];
-  let canvas, ctx, w = 0, h = 0, running = false, onScreen = true, last = 0, calm = 0, simTime = 0;
+  const heights = new Array(24).fill(0); // how high the heap already is in each column
   let taps = [];
-
-  const resize = () => {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    w = home.clientWidth; h = home.clientHeight;
-    canvas.width = w * dpr; canvas.height = h * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  };
-
-  const ensureCanvas = () => {
-    if (canvas) return;
-    canvas = document.createElement("canvas");
-    canvas.className = "heart-pile";
-    canvas.setAttribute("aria-hidden", "true");
-    home.appendChild(canvas);
-    ctx = canvas.getContext("2d");
-    resize();
-    addEventListener("resize", resize);
-    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; wake(); },
-      { root: $("#scroller"), threshold: 0.1 }).observe(home);
-    document.addEventListener("visibilitychange", wake);
-  };
-
-  const spawn = () => {
-    for (let i = 0; i < 40; i++) {
-      const r = 7 + Math.random() * 10;
-      bits.push({
-        x: r + Math.random() * (w - 2 * r), y: -r - Math.random() * 260,
-        vx: (Math.random() - 0.5) * 40, vy: 60 + Math.random() * 80,
-        r, rot: Math.random() * 6.3, vr: 0,
-        glyph: glyphs[i % glyphs.length], color: colors[Math.floor(Math.random() * colors.length)],
-        inside: false, landed: false, phase: Math.random() * 6.3, sway: 6 + Math.random() * 10,
-      });
-    }
-    while (bits.length > 200) bits.shift();
-    wake();
-  };
-
-  const step = (dt) => {
-    simTime += dt;
-    for (const b of bits) {
-      b.vx += gravity.x * dt; b.vy += gravity.y * dt;
-      b.vx *= 0.995; b.vy *= 0.995;
-      if (!b.landed) {
-        // floating down: gentle side-to-side sway and a slow terminal speed
-        b.vx += Math.cos(simTime * 2.2 + b.phase) * b.sway * dt * 3;
-        b.vr = Math.sin(simTime * 1.7 + b.phase) * 1.2;
-        if (b.vy > MAX_FALL) b.vy = MAX_FALL;
-        b.vx = Math.max(-60, Math.min(60, b.vx));
-      }
-      b.x += b.vx * dt; b.y += b.vy * dt;
-      b.rot += b.vr * dt; b.vr *= 0.97;
-      if (b.y > b.r) b.inside = true;
-      // walls (the top only counts once a piece has fallen in)
-      if (b.x < b.r) { b.x = b.r; b.vx *= -0.3; b.vr += b.vy * 0.01; b.landed = b.landed || b.y > h * 0.5; }
-      if (b.x > w - b.r) { b.x = w - b.r; b.vx *= -0.3; b.vr -= b.vy * 0.01; b.landed = b.landed || b.y > h * 0.5; }
-      if (b.y > h - b.r) { b.y = h - b.r; b.vy *= -0.25; b.vx *= 0.9; b.vr += b.vx * 0.02; b.landed = true; }
-      if (b.inside && b.y < b.r) { b.y = b.r; b.vy *= -0.25; b.vx *= 0.9; }
-    }
-    // pieces push each other apart so they stack instead of overlapping
-    for (let pass = 0; pass < 2; pass++) {
-      for (let i = 0; i < bits.length; i++) {
-        const a = bits[i];
-        for (let j = i + 1; j < bits.length; j++) {
-          const c = bits[j];
-          const dx = c.x - a.x, dy = c.y - a.y, min = (a.r + c.r) * 0.85;
-          if (Math.abs(dx) > min || Math.abs(dy) > min) continue;
-          const d2 = dx * dx + dy * dy;
-          if (d2 >= min * min || d2 === 0) continue;
-          const d = Math.sqrt(d2), push = (min - d) / 2, nx = dx / d, ny = dy / d;
-          a.x -= nx * push; a.y -= ny * push; c.x += nx * push; c.y += ny * push;
-          if (a.landed || c.landed) { a.landed = c.landed = true; }
-          const rel = (c.vx - a.vx) * nx + (c.vy - a.vy) * ny;
-          if (rel < 0) {
-            const imp = rel * 0.6;
-            a.vx += imp * nx; a.vy += imp * ny; c.vx -= imp * nx; c.vy -= imp * ny;
-          }
-        }
-      }
-    }
-  };
-
-  const draw = () => {
-    ctx.clearRect(0, 0, w, h);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    for (const b of bits) {
-      ctx.save();
-      ctx.translate(b.x, b.y);
-      ctx.rotate(b.rot);
-      ctx.fillStyle = b.color;
-      ctx.font = `${b.r * 2.1}px serif`;
-      ctx.fillText(b.glyph, 0, 0);
-      ctx.restore();
-    }
-  };
-
-  const frame = (now) => {
-    if (!running) return;
-    const dt = Math.min((now - last) / 1000, 1 / 30);
-    last = now;
-    step(dt / 2); step(dt / 2);
-    draw();
-    // go to sleep once everything has settled, to save battery
-    const fast = bits.some((b) => !b.landed || Math.abs(b.vx) + Math.abs(b.vy) > 12);
-    calm = fast ? 0 : calm + dt;
-    if (calm > 0.8 || !onScreen || document.hidden) { running = false; return; }
-    requestAnimationFrame(frame);
-  };
-  function wake() {
-    if (running || !canvas || !bits.length || !onScreen || document.hidden) return;
-    running = true; calm = 0; last = performance.now();
-    requestAnimationFrame(frame);
-  }
 
   names.addEventListener("click", () => {
     const now = Date.now();
     taps = taps.filter((t) => now - t < 1200).concat(now);
     if (taps.length < 3) return;
     taps = [];
-    ensureCanvas();
-    spawn();
+    const h = home.clientHeight, w = home.clientWidth;
+    const batch = document.createDocumentFragment();
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement("i");
+      const size = 14 + Math.random() * 20;
+      const x = Math.random() * (w - size);
+      // land on top of whatever has already piled up in this column
+      const col = Math.min(heights.length - 1, Math.floor((x / w) * heights.length));
+      const land = h - 8 - size - heights[col] + 40;
+      heights[col] = Math.min(heights[col] + size * 0.55, h * 0.2);
+      el.textContent = glyphs[i % glyphs.length];
+      el.style.left = `${x}px`;
+      el.style.color = colors[Math.floor(Math.random() * colors.length)];
+      el.style.fontSize = `${size}px`;
+      el.style.setProperty("--dur", `${2.6 + Math.random() * 1.4}s`);
+      el.style.setProperty("--delay", `${Math.random() * 1.1}s`);
+      el.style.setProperty("--drift", `${(Math.random() - 0.5) * 50}px`);
+      el.style.setProperty("--spin", `${(Math.random() - 0.5) * 360}deg`);
+      el.style.setProperty("--land", `${land}px`);
+      batch.appendChild(el);
+    }
+    pile.appendChild(batch);
+    // keep the page light: drop the oldest once the heap gets very big
+    while (pile.children.length > 240) pile.firstChild.remove();
   });
 }
 
