@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Wedding Invitation</title>
+  <meta name="theme-color" content="#4a0610" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="locked">
+
+  <!-- ===== Opening envelope ===== -->
+  <div id="intro" class="intro">
+    <p class="intro-top">You are cordially invited</p>
+
+    <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open the invitation">
+      <div class="env-back"></div>
+      <div class="letter">
+        <div class="letter-inner">
+          <span class="letter-small">Together with their families</span>
+          <h2 class="letter-names"><span data-groom></span><em>&amp;</em><span data-bride></span></h2>
+          <span class="letter-small" data-date-short></span>
+        </div>
+      </div>
+      <div class="env-pocket"></div>
+      <div class="env-flap"></div>
+      <div class="seal"><span data-initials></span></div>
+    </div>
+
+    <p class="intro-hint">Tap the seal to open</p>
+  </div>
+
+  <!-- Falling petals -->
+  <div id="petals" class="petals" aria-hidden="true"></div>
+
+  <!-- ===== Scrollable invitation ===== -->
+  <main id="scroller" class="scroller" aria-hidden="true">
+
+    <section id="home" class="section hero" data-label="Home">
+      <div class="frame"></div>
+      <div class="hero-content reveal">
+        <p class="invocation">॥ Shri Ganeshaya Namah ॥</p>
+        <p class="small-caps">Together with their families</p>
+        <h1 class="names">
+          <span data-groom></span>
+          <span class="amp">&amp;</span>
+          <span data-bride></span>
+        </h1>
+        <p class="invite-line">request the pleasure of your company<br />as they begin their journey together</p>
+        <div class="divider"><span></span></div>
+        <p class="hero-date" data-date-long></p>
+        <p class="hero-city" data-city></p>
+
+        <div class="countdown" id="countdown">
+          <div><b id="cd-days">0</b><span>Days</span></div>
+          <div><b id="cd-hours">0</b><span>Hours</span></div>
+          <div><b id="cd-mins">0</b><span>Minutes</span></div>
+          <div><b id="cd-secs">0</b><span>Seconds</span></div>
+        </div>
+      </div>
+      <div class="scroll-cue">Scroll for the celebrations<span>⌄</span></div>
+    </section>
+
+    <section id="couple" class="section couple" data-label="The Couple">
+      <div class="frame"></div>
+      <div class="couple-content reveal">
+        <p class="small-caps">With the blessings of our elders</p>
+        <div class="person">
+          <h2 class="person-name" data-groom-full></h2>
+          <p class="person-line" data-groom-gp></p>
+          <p class="person-line" data-groom-parents></p>
+        </div>
+        <div class="divider weds"><span></span></div>
+        <p class="weds-word">weds</p>
+        <div class="person">
+          <h2 class="person-name" data-bride-full></h2>
+          <p class="person-line" data-bride-gp></p>
+          <p class="person-line" data-bride-parents></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Event sections are rendered here from CONFIG in script.js -->
+    <div id="events"></div>
+
+    <section id="rsvp" class="section rsvp" data-label="RSVP">
+      <div class="frame"></div>
+      <div class="rsvp-content reveal">
+        <p class="closing" data-closing></p>
+        <div class="divider"><span></span></div>
+        <p class="small-caps">Warm Regards</p>
+        <p class="regards" data-regards></p>
+
+        <div class="rsvp-box">
+          <h2 class="script-title">RSVP</h2>
+          <p class="rsvp-name" data-rsvp-name></p>
+          <p class="rsvp-phones" data-rsvp-phones></p>
+          <div class="actions">
+            <a class="btn" id="rsvp-whatsapp" target="_blank" rel="noopener">RSVP on WhatsApp</a>
+            <a class="btn ghost" id="rsvp-call">Call</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav id="dots" class="dots" aria-label="Sections" hidden></nav>
+
+  <button id="musicBtn" class="music-btn" aria-label="Pause music" hidden>
+    <span class="bars"><i></i><i></i><i></i><i></i></span>
+  </button>
+
+  <!-- Put your song at assets/music/background.mp3. If it's missing, a soft built-in melody plays instead. -->
+  <audio id="bgm" src="assets/music/background.mp3" loop preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
