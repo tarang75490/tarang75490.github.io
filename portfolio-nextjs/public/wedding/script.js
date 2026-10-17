@@ -572,6 +572,17 @@ const Music = {
   btn: $("#musicBtn"),
   mode: null, // "file" | "synth"
   playing: false,
+  // Songs alternate: 1, 2, 1, 2, ...
+  playlist: ["assets/music/background.m4a", "assets/music/background-2.m4a"],
+  track: 0,
+
+  init() {
+    this.audio.addEventListener("ended", () => {
+      this.track = (this.track + 1) % this.playlist.length;
+      this.audio.src = this.playlist[this.track];
+      if (this.playing) this.audio.play().catch(() => {});
+    });
+  },
 
   start() {
     // Prime Web Audio synchronously inside the tap (required by Safari/iOS).
@@ -1003,6 +1014,7 @@ setupLang();
 startCountdown();
 setupScroll();
 setupIntro();
+Music.init();
 Music.btn.addEventListener("click", () => Music.toggle());
 setupReel();
 
