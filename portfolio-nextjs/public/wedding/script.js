@@ -921,8 +921,8 @@ function setupHearts() {
   const names = $("#home .names");
   const glyphs = ["❤", "❤", "❥", "✿", "❀"];
   const colors = ["#c9184a", "#e05780", "#b8862b", "#d9b45a", "#8a1c2b"];
-  const G = 700; // px/s²
-  const MAX_FALL = 95; // px/s while floating down, so they drift like petals
+  const G = 900; // px/s²
+  const MAX_FALL = 240; // px/s while falling: a light, quick fall (about 3 s top to bottom)
   const gravity = { x: 0, y: G };
   const bits = [];
   let canvas, ctx, w = 0, h = 0, running = false, onScreen = true, last = 0, calm = 0, simTime = 0;
@@ -976,11 +976,11 @@ function setupHearts() {
     for (let i = 0; i < 40; i++) {
       const r = 7 + Math.random() * 10;
       bits.push({
-        x: r + Math.random() * (w - 2 * r), y: -r - Math.random() * 520,
-        vx: (Math.random() - 0.5) * 20, vy: 20 + Math.random() * 30,
+        x: r + Math.random() * (w - 2 * r), y: -r - Math.random() * 260,
+        vx: (Math.random() - 0.5) * 40, vy: 60 + Math.random() * 80,
         r, rot: Math.random() * 6.3, vr: 0,
         glyph: glyphs[i % glyphs.length], color: colors[Math.floor(Math.random() * colors.length)],
-        inside: false, landed: false, phase: Math.random() * 6.3, sway: 18 + Math.random() * 22,
+        inside: false, landed: false, phase: Math.random() * 6.3, sway: 6 + Math.random() * 10,
       });
     }
     while (bits.length > 200) bits.shift();
