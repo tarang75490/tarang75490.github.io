@@ -4,9 +4,9 @@
   --gold: #d9b45a;
   --gold-light: #f3dc9a;
   --cream: #fdf6e3;
-  --script: "Great Vibes", cursive;
-  --serif: "Cormorant Garamond", Georgia, serif;
-  --caps: "Cinzel", Georgia, serif;
+  --script: "Great Vibes", "Tiro Devanagari Hindi", cursive;
+  --serif: "Cormorant Garamond", "Tiro Devanagari Hindi", Georgia, serif;
+  --caps: "Cinzel", "Tiro Devanagari Hindi", Georgia, serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -583,19 +583,37 @@ body:not(.locked) .scroller { opacity: 1; }
     radial-gradient(circle at 50% 50%, rgba(217, 180, 90, 0.14), transparent 60%),
     linear-gradient(170deg, #4a0a15, var(--maroon-dark));
 }
-.couple-content { max-width: 620px; }
-.person { margin-top: 1.6rem; }
+.couple-content { width: 100%; max-width: 640px; padding: 0 0.75rem; }
+.person { margin-top: 1.4rem; }
 .person-name {
   font-family: var(--script);
   font-weight: 400;
-  font-size: clamp(2.6rem, 11vw, 4rem);
-  line-height: 1.15;
+  font-size: clamp(2.9rem, 12.5vw, 4.6rem);
+  line-height: 1.2;
+  word-spacing: 0.12em;
+  margin-bottom: 0.55rem;
   color: var(--gold-light);
+  text-shadow: 0 2px 20px rgba(217, 180, 90, 0.4), 0 2px 4px rgba(0, 0, 0, 0.35);
 }
-.person-line { font-size: clamp(1rem, 3.6vw, 1.15rem); line-height: 1.5; opacity: 0.9; }
-.person-line + .person-line { font-style: italic; }
-.divider.weds { margin: 1.6rem auto 0.2rem; }
-.weds-word { font-family: var(--script); font-size: 2rem; color: var(--gold); }
+.person-line {
+  font-size: clamp(1rem, 3.8vw, 1.2rem);
+  line-height: 1.55;
+  opacity: 0.92;
+  text-wrap: balance;
+}
+.person-line + .person-line { font-style: italic; margin-top: 0.15rem; }
+.person-line .rel {
+  font-family: var(--caps);
+  font-style: normal;
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+}
+.divider.weds { margin: 1.8rem auto 0.3rem; }
+.weds-word { font-family: var(--script); font-size: 2.4rem; line-height: 1.2; color: var(--gold); }
+html[lang="hi"] .weds-word { font-size: 2rem; }
+/* Devanagari reads smaller than Cinzel caps at the same size. */
+html[lang="hi"] .small-caps { font-size: 1.15em; }
 
 /* ================= Reveal animations ================= */
 .reveal { opacity: 0; transform: translateY(40px) scale(0.98); transition: opacity 1s ease, transform 1s cubic-bezier(.2, .8, .2, 1); }
@@ -687,6 +705,38 @@ body:not(.locked) .scroller { opacity: 1; }
   background: var(--gold-light);
   transform: rotate(-45deg);
 }
+
+/* ================= Language switch ================= */
+.lang-btn {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: 16px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gold);
+  background: rgba(46, 5, 12, 0.85);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  color: var(--gold-light);
+  font-family: var(--serif);
+  font-size: 1rem;
+  cursor: pointer;
+}
+.lang-btn i { display: none; }
+.lang-btn span { padding: 6px 14px; border-radius: 999px; transition: background 0.2s, color 0.2s; }
+.lang-btn span.active { background: var(--gold); color: var(--maroon-dark); font-weight: 600; }
+
+/* Devanagari breaks apart with wide letter-spacing, and needs a bit more line height. */
+html[lang="hi"] body * { letter-spacing: normal !important; }
+html[lang="hi"] .names,
+html[lang="hi"] .letter-names,
+html[lang="hi"] .person-name,
+html[lang="hi"] .event-name,
+html[lang="hi"] .script-title { line-height: 1.4; }
 
 /* ================= Keyframes ================= */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }

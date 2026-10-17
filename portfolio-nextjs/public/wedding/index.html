@@ -24,22 +24,24 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="style.css?v=11" />
+  <link rel="stylesheet" href="style.css?v=15" />
 </head>
 <body class="locked">
 
+  <button id="langBtn" class="lang-btn" aria-label="Switch language / भाषा बदलें"><span data-lang="en">English</span><i>|</i><span data-lang="hi" lang="hi">हिंदी</span></button>
+
   <!-- ===== Opening envelope ===== -->
   <div id="intro" class="intro">
-    <p class="intro-top">You are cordially invited</p>
+    <p class="intro-top" data-i18n="invited">You are cordially invited</p>
 
     <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open the invitation">
       <div class="env-back"></div>
       <div class="letter">
         <div class="letter-inner">
-          <span class="letter-small">Together with their families</span>
+          <span class="letter-small" data-i18n="families">Together with their families</span>
           <h2 class="letter-names"><span data-groom></span><em>&amp;</em><span data-bride></span></h2>
           <span class="letter-small" data-date-short></span>
         </div>
@@ -49,7 +51,7 @@
       <div class="seal"><span data-initials></span></div>
     </div>
 
-    <p class="intro-hint">Tap the seal to open</p>
+    <p class="intro-hint" data-i18n="tapSeal">Tap the seal to open</p>
   </div>
 
   <!-- Falling petals -->
@@ -61,39 +63,39 @@
     <section id="home" class="section hero" data-label="Home">
       <div class="frame"></div>
       <div class="hero-content reveal">
-        <p class="invocation">॥ Shri Ganeshaya Namah ॥</p>
-        <p class="small-caps">Together with their families</p>
+        <p class="invocation" data-i18n="invocation">॥ Shri Ganeshaya Namah ॥</p>
+        <p class="small-caps" data-i18n="families">Together with their families</p>
         <h1 class="names">
           <span data-groom></span>
           <span class="amp">&amp;</span>
           <span data-bride></span>
         </h1>
-        <p class="invite-line">request the pleasure of your company<br />as they begin their journey together</p>
+        <p class="invite-line" data-i18n-html="inviteLine">request the pleasure of your company<br />as they begin their journey together</p>
         <div class="divider"><span></span></div>
         <p class="hero-date" data-date-long></p>
         <p class="hero-city" data-city></p>
 
         <div class="countdown" id="countdown">
-          <div><b id="cd-days">0</b><span>Days</span></div>
-          <div><b id="cd-hours">0</b><span>Hours</span></div>
-          <div><b id="cd-mins">0</b><span>Minutes</span></div>
-          <div><b id="cd-secs">0</b><span>Seconds</span></div>
+          <div><b id="cd-days">0</b><span data-i18n="days">Days</span></div>
+          <div><b id="cd-hours">0</b><span data-i18n="hours">Hours</span></div>
+          <div><b id="cd-mins">0</b><span data-i18n="mins">Minutes</span></div>
+          <div><b id="cd-secs">0</b><span data-i18n="secs">Seconds</span></div>
         </div>
       </div>
-      <div class="scroll-cue">Scroll for the celebrations<span>⌄</span></div>
+      <div class="scroll-cue"><em data-i18n="scrollCue">Scroll for the celebrations</em><span>⌄</span></div>
     </section>
 
     <section id="couple" class="section couple" data-label="The Couple">
       <div class="frame"></div>
       <div class="couple-content reveal">
-        <p class="small-caps">With the blessings of our elders</p>
+        <p class="small-caps" data-i18n="elders">With the blessings of our elders</p>
         <div class="person">
           <h2 class="person-name" data-groom-full></h2>
           <p class="person-line" data-groom-gp></p>
           <p class="person-line" data-groom-parents></p>
         </div>
         <div class="divider weds"><span></span></div>
-        <p class="weds-word">weds</p>
+        <p class="weds-word" data-i18n="weds">weds</p>
         <div class="person">
           <h2 class="person-name" data-bride-full></h2>
           <p class="person-line" data-bride-gp></p>
@@ -110,11 +112,11 @@
       <div class="rsvp-content reveal">
         <p class="closing" data-closing></p>
         <div class="divider"><span></span></div>
-        <p class="small-caps">Warm Regards</p>
+        <p class="small-caps" data-i18n="regardsTitle">Warm Regards</p>
         <p class="regards" data-regards></p>
 
         <div class="social">
-          <p class="small-caps">Follow our journey</p>
+          <p class="small-caps" data-i18n="follow">Follow our journey</p>
           <a class="insta" id="instagram" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg>
             <span data-instagram-handle></span>
@@ -123,7 +125,7 @@
 
       </div>
       <footer class="contact-footer">
-        <p class="small-caps">For any queries</p>
+        <p class="small-caps" data-i18n="queries">For any queries</p>
         <div class="contacts" data-contacts></div>
       </footer>
     </section>
@@ -131,8 +133,8 @@
     <section id="moments" class="section reel" data-label="Our Moments">
       <div class="frame"></div>
       <div class="reel-content reveal">
-        <p class="small-caps">A glimpse of us</p>
-        <h2 class="script-title">Our Moments</h2>
+        <p class="small-caps" data-i18n="glimpse">A glimpse of us</p>
+        <h2 class="script-title" data-i18n="moments">Our Moments</h2>
         <div class="reel-wrap">
           <video id="reel" src="assets/video/reel.mp4" poster="assets/video/reel-poster.jpg" muted loop playsinline preload="none"></video>
           <button id="reelSound" class="reel-sound" aria-label="Turn sound on">
@@ -163,6 +165,6 @@
   <!-- Put your song at assets/music/background.mp3. If it's missing, a soft built-in melody plays instead. -->
   <audio id="bgm" src="assets/music/background.mp3" loop preload="auto"></audio>
 
-  <script src="script.js?v=15"></script>
+  <script src="script.js?v=17"></script>
 </body>
 </html>

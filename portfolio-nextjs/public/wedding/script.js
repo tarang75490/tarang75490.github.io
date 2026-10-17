@@ -1,39 +1,56 @@
 /* =========================================================
    EDIT EVERYTHING HERE — names, dates, venues, contacts.
    Times are 24h "HH:MM" in the timezone below.
+   A field ending in "Hi" is the Hindi version of the field before it.
    ========================================================= */
 const VENUE = {
   venue: "The Langkawi Resort",
+  venueHi: "द लंकावी रिज़ॉर्ट",
   address: "Bariatu, Ranchi, 834009",
+  addressHi: "बरियातू, राँची 834009",
   map: "https://share.google/zkD2DEFbRsMNBRoNX",
 };
 
 const FAMILY_VENUE = {
   venue: "Nand Niwas, Pawan Industries",
+  venueHi: "नंद निवास, पवन इंडस्ट्रीज़",
   address: "Radha Marg, Agrasen Path, Upper Bazar, Ranchi, Jharkhand 834001",
+  addressHi: "राधा मार्ग, अग्रसेन पथ, अपर बाज़ार, राँची, झारखंड 834001",
   map: "https://www.google.com/maps/place/Shree+Shyam+Mandir,+Agrasen+Marg,+Ranchi/@23.3701995,85.3148425,18.59z/data=!4m14!1m7!3m6!1s0x39f4e16d3eaefb4d:0xb233169bf6a1f09b!2sShree+Shyam+Mandir,+Harmu+Road,+RANCHI!8m2!3d23.3719925!4d85.3128086!16s%2Fg%2F11js_97ntc!3m5!1s0x39f4e102c68f36af:0xb24a68b19ed03ce!8m2!3d23.3709944!4d85.3153848!16s%2Fg%2F1pyqh90_5",
 };
 
 const CONFIG = {
   groom: {
     first: "Tarang",
+    firstHi: "तरंग",
     full: "Tarang Khetan",
+    fullHi: "तरंग खेतान",
     grandparents: "Gr/S/o Late Mrs. Sita Devi & Late Mr. Santulal Khetan",
+    grandparentsHi: "पौत्र — स्व. श्रीमती सीता देवी एवं स्व. श्री संतूलाल खेतान",
     parents: "S/o Mrs. Sheela & Mr. Sanjay Khetan",
+    parentsHi: "सुपुत्र — श्रीमती शीला एवं श्री संजय खेतान",
   },
   bride: {
     first: "Muskan",
+    firstHi: "मुस्कान",
     full: "Muskan Mittal",
-    grandparents: "Gr/D/o Lt. Mrs. Chadrapati Devi & Lt. Mr. Bishamber Dayal Agarwal",
+    fullHi: "मुस्कान मित्तल",
+    grandparents: "Gr/D/o Late Mrs. Chadrapati Devi & Late Mr. Bishamber Dayal Agarwal",
+    grandparentsHi: "पौत्री — स्व. श्रीमती चन्द्रपति देवी एवं स्व. श्री बिशम्बर दयाल अग्रवाल",
     parents: "D/o Mrs. Vinita & Mr. Raj Kumar Agarwal",
+    parentsHi: "सुपुत्री — श्रीमती विनीता एवं श्री राज कुमार अग्रवाल",
   },
   initials: "T&M",
   city: "Ranchi, Jharkhand",
+  cityHi: "राँची, झारखंड",
   timezone: "Asia/Kolkata",
   tzOffset: "+05:30",
   closingMessage:
     "With hearts full of love and joy, we warmly invite you to celebrate our special day and bless us as we begin our forever together. ❤️",
+  closingMessageHi:
+    "हर्ष और स्नेह से भरे हृदय से हम आपको इस शुभ अवसर पर सादर आमंत्रित करते हैं। पधारकर नवदम्पति को अपना आशीर्वाद प्रदान करें। ❤️",
   regards: "Khetan Family",
+  regardsHi: "खेतान परिवार",
   instagram: "https://www.instagram.com/soulful_tm/",
 
   // The hero date and countdown use the event marked `main: true`.
@@ -41,7 +58,9 @@ const CONFIG = {
     {
       id: "mayra",
       name: "Mayra",
+      nameHi: "मायरा",
       tagline: "Blessings from the maternal family",
+      taglineHi: "ननिहाल पक्ष का स्नेहाशीर्वाद",
       date: "2026-12-01",
       start: "11:00",
       ...VENUE,
@@ -50,7 +69,9 @@ const CONFIG = {
     {
       id: "sangeet",
       name: "Sangeet Night",
+      nameHi: "संगीत संध्या",
       tagline: "An evening of song, dance & celebration",
+      taglineHi: "गीत, नृत्य और उल्लास की एक शाम",
       date: "2026-12-01",
       start: "19:15",
       ...VENUE,
@@ -59,7 +80,9 @@ const CONFIG = {
     {
       id: "haldi",
       name: "Sunkissed Haldi",
+      nameHi: "सुनहरी हल्दी",
       tagline: "A splash of turmeric, a lot of laughter",
+      taglineHi: "हल्दी का रंग, ढेर सारी हँसी",
       date: "2026-12-02",
       start: "09:15",
       ...VENUE,
@@ -68,7 +91,9 @@ const CONFIG = {
     {
       id: "baraat",
       name: "Korath (Nikasi) & Baraat",
+      nameHi: "कोरथ (निकासी) एवं बारात",
       tagline: "The groom sets out with music & dhol",
+      taglineHi: "ढोल-नगाड़ों के संग दूल्हे राजा की रवानगी",
       date: "2026-12-02",
       start: "17:30",
       main: true,
@@ -78,7 +103,9 @@ const CONFIG = {
     {
       id: "reception",
       name: "Reception",
+      nameHi: "प्रीतिभोज",
       tagline: "Dinner, dancing & celebrations",
+      taglineHi: "भोज, नृत्य और उत्सव",
       date: "2026-12-02",
       start: "19:00",
       ...VENUE,
@@ -91,7 +118,9 @@ const CONFIG = {
     {
       id: "ganesh-puja",
       name: "Ganesh Puja & Vyah Haath",
+      nameHi: "गणेश पूजन एवं ब्याह हाथ",
       tagline: "Seeking Lord Ganesha's blessings to begin",
+      taglineHi: "शुभारंभ हेतु श्री गणेश जी का आशीर्वाद",
       date: "2026-11-26",
       start: "11:00",
       ...FAMILY_VENUE,
@@ -100,7 +129,9 @@ const CONFIG = {
     {
       id: "kirtan",
       name: "Shri Shyam Ji Kirtan Night",
+      nameHi: "श्री श्याम जी कीर्तन संध्या",
       tagline: "An evening of bhajans & devotion",
+      taglineHi: "भजनों और भक्ति की एक शाम",
       date: "2026-11-29",
       start: "16:00",
       ...FAMILY_VENUE,
@@ -109,8 +140,8 @@ const CONFIG = {
   ],
 
   contacts: [
-    { name: "Sanjay Khetan", phone: "+91 9334209666" },
-    { name: "Tarang Khetan", phone: "+91 9660744867" },
+    { name: "Sanjay Khetan", nameHi: "संजय खेतान", phone: "+91 9334209666" },
+    { name: "Tarang Khetan", nameHi: "तरंग खेतान", phone: "+91 9660744867" },
   ],
 };
 
@@ -124,8 +155,70 @@ const allEvents = isFamily ? [...CONFIG.familyEvents, ...CONFIG.events] : CONFIG
 const mainEvent = CONFIG.events.find((e) => e.main) || CONFIG.events[CONFIG.events.length - 1];
 const toDate = (date, time) => new Date(`${date}T${time}:00${CONFIG.tzOffset}`);
 
+/* ---------- Language ---------- */
+const STRINGS = {
+  en: {
+    invited: "You are cordially invited",
+    families: "Together with their families",
+    tapSeal: "Tap the seal to open",
+    invocation: "॥ Shri Ganeshaya Namah ॥",
+    inviteLine: "request the pleasure of your company<br />as they begin their journey together",
+    days: "Days", hours: "Hours", mins: "Minutes", secs: "Seconds",
+    married: "Just Married!",
+    scrollCue: "Scroll for the celebrations",
+    elders: "With the blessings of our elders",
+    weds: "weds",
+    count: (i, n) => `Celebration ${i} of ${n}`,
+    date: "Date", time: "Time", venue: "Venue",
+    onwards: (hhmm) => `${formatTime(hhmm)} onwards`,
+    viewMap: "View on Map",
+    regardsTitle: "Warm Regards",
+    follow: "Follow our journey",
+    queries: "For any queries",
+    glimpse: "A glimpse of us",
+    moments: "Our Moments",
+    tapSound: "Tap for sound", soundOn: "Sound on",
+    home: "Home", couple: "The Couple",
+    title: isFamily ? "Family Invitation" : "Wedding Invitation",
+  },
+  hi: {
+    invited: "आप सादर आमंत्रित हैं",
+    families: "सपरिवार शुभ आशीर्वाद सहित",
+    tapSeal: "खोलने के लिए मुहर को छुएँ",
+    invocation: "॥ श्री गणेशाय नमः ॥",
+    inviteLine: "अपने नवजीवन के शुभारंभ पर<br />आपकी गरिमामयी उपस्थिति के आकांक्षी हैं",
+    days: "दिन", hours: "घंटे", mins: "मिनट", secs: "सेकंड",
+    married: "विवाह बंधन में बंध गए!",
+    scrollCue: "उत्सवों के लिए नीचे स्क्रॉल करें",
+    elders: "बड़ों के आशीर्वाद से",
+    weds: "संग",
+    count: (i, n) => `उत्सव ${i} / ${n}`,
+    date: "दिनांक", time: "समय", venue: "स्थान",
+    onwards: (hhmm) => {
+      const [h, m] = hhmm.split(":").map(Number);
+      const part = h < 12 ? "सुबह" : h < 16 ? "दोपहर" : "शाम";
+      return `${part} ${h % 12 || 12}:${String(m).padStart(2, "0")} बजे से`;
+    },
+    viewMap: "नक्शे पर देखें",
+    regardsTitle: "विनीत",
+    follow: "हमारे सफ़र से जुड़े रहें",
+    queries: "किसी भी जानकारी हेतु संपर्क करें",
+    glimpse: "हमारी एक झलक",
+    moments: "हमारे ख़ास पल",
+    tapSound: "आवाज़ के लिए छुएँ", soundOn: "आवाज़ चालू",
+    home: "मुखपृष्ठ", couple: "वर-वधू",
+    title: isFamily ? "पारिवारिक निमंत्रण" : "विवाह निमंत्रण",
+  },
+};
+
+let lang = "en";
+try { if (localStorage.getItem("wedding-lang") === "hi") lang = "hi"; } catch {}
+const t = (key) => STRINGS[lang][key];
+// The Hindi value of a CONFIG field lives next to it as `<field>Hi`.
+const tr = (obj, field) => (lang === "hi" && obj[field + "Hi"]) || obj[field];
+
 function formatDate(date, opts) {
-  return toDate(date, "12:00").toLocaleDateString("en-IN", { timeZone: CONFIG.timezone, ...opts });
+  return toDate(date, "12:00").toLocaleDateString(lang === "hi" ? "hi-IN" : "en-IN", { timeZone: CONFIG.timezone, ...opts });
 }
 
 function formatTime(hhmm) {
@@ -150,24 +243,50 @@ function mandalaSVG() {
 }
 
 /* ---------- Render content ---------- */
+// Event sections are built once; render() fills in the text and runs
+// again whenever the language changes.
+function buildEvents() {
+  $("#events").outerHTML = allEvents
+    .map((ev) => {
+      const t = ev.theme;
+      const style = `--bg1:${t.bg1};--bg2:${t.bg2};--accent:${t.accent};--ink:${t.ink};--card:${t.card};--btn-ink:${t.btnInk}`;
+      return `
+      <section id="${ev.id}" class="section event" style="${style}">
+        <div class="mandala" aria-hidden="true">${mandalaSVG()}</div>
+        <article class="event-card reveal"></article>
+      </section>`;
+    })
+    .join("");
+}
+
 function render() {
   const { groom, bride, contacts } = CONFIG;
-  document.title = `${groom.first} & ${bride.first} · ${isFamily ? "Family" : "Wedding"} Invitation`;
+  document.documentElement.lang = lang;
+  document.title = `${tr(groom, "first")} & ${tr(bride, "first")} · ${t("title")}`;
+  $$("[data-i18n]").forEach((el) => (el.textContent = t(el.dataset.i18n)));
+  $$("[data-i18n-html]").forEach((el) => (el.innerHTML = t(el.dataset.i18nHtml)));
+  $$("#langBtn [data-lang]").forEach((el) => el.classList.toggle("active", el.dataset.lang === lang));
+
   const fill = (attr, text) => $$(`[${attr}]`).forEach((el) => (el.textContent = text));
-  fill("data-groom", groom.first);
-  fill("data-bride", bride.first);
-  fill("data-groom-full", groom.full);
-  fill("data-bride-full", bride.full);
-  fill("data-groom-gp", groom.grandparents);
-  fill("data-groom-parents", groom.parents);
-  fill("data-bride-gp", bride.grandparents);
-  fill("data-bride-parents", bride.parents);
+  fill("data-groom", tr(groom, "first"));
+  fill("data-bride", tr(bride, "first"));
+  fill("data-groom-full", tr(groom, "full"));
+  fill("data-bride-full", tr(bride, "full"));
+  // Family lines: the relation ("S/o", "सुपुत्र") is set apart in gold.
+  const lineage = (attr, text) => {
+    const [rel, rest] = text.includes(" — ") ? text.split(" — ") : [text.split(" ")[0], text.slice(text.indexOf(" ") + 1)];
+    $$(`[${attr}]`).forEach((el) => (el.innerHTML = `<span class="rel">${rel}</span> ${rest}`));
+  };
+  lineage("data-groom-gp", tr(groom, "grandparents"));
+  lineage("data-groom-parents", tr(groom, "parents"));
+  lineage("data-bride-gp", tr(bride, "grandparents"));
+  lineage("data-bride-parents", tr(bride, "parents"));
   fill("data-initials", CONFIG.initials);
-  fill("data-city", CONFIG.city);
+  fill("data-city", tr(CONFIG, "city"));
   fill("data-date-long", formatDate(mainEvent.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" }));
   fill("data-date-short", formatDate(mainEvent.date, { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, " · "));
-  fill("data-closing", CONFIG.closingMessage);
-  fill("data-regards", CONFIG.regards);
+  fill("data-closing", tr(CONFIG, "closingMessage"));
+  fill("data-regards", tr(CONFIG, "regards"));
   $("#instagram").href = CONFIG.instagram;
   fill("data-instagram-handle", "@" + CONFIG.instagram.split("/").filter(Boolean).pop());
 
@@ -176,7 +295,7 @@ function render() {
     .map(
       (c) => `
       <div class="contact">
-        <span class="contact-name">${c.name}</span>
+        <span class="contact-name">${tr(c, "name")}</span>
         <a class="contact-phone" href="tel:+${digits(c.phone)}">${c.phone}</a>
         <a class="call-btn" href="tel:+${digits(c.phone)}" aria-label="Call ${c.name}">
           <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
@@ -186,30 +305,47 @@ function render() {
     .join("");
 
   const total = allEvents.length;
-  $("#events").outerHTML = allEvents
-    .map((ev, i) => {
-      const t = ev.theme;
-      const style = `--bg1:${t.bg1};--bg2:${t.bg2};--accent:${t.accent};--ink:${t.ink};--card:${t.card};--btn-ink:${t.btnInk}`;
-      return `
-      <section id="${ev.id}" class="section event" data-label="${ev.name}" style="${style}">
-        <div class="mandala" aria-hidden="true">${mandalaSVG()}</div>
-        <article class="event-card reveal">
-          <p class="event-count">Celebration ${i + 1} of ${total}</p>
-          <h2 class="event-name${ev.name.length > 20 ? " long xlong" : ev.name.length > 10 ? " long" : ""}">${ev.name}</h2>
-          <p class="event-tagline">${ev.tagline}</p>
+  allEvents.forEach((ev, i) => {
+    const name = tr(ev, "name");
+    const section = $(`#${ev.id}`);
+    section.dataset.label = name;
+    $(".event-card", section).innerHTML = `
+          <p class="event-count">${t("count")(i + 1, total)}</p>
+          <h2 class="event-name${name.length > 20 ? " long xlong" : name.length > 10 ? " long" : ""}">${name}</h2>
+          <p class="event-tagline">${tr(ev, "tagline")}</p>
           <div class="divider"><span></span></div>
           <ul class="event-details">
-            <li><span class="label">Date</span>${formatDate(ev.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</li>
-            <li><span class="label">Time</span>${formatTime(ev.start)} onwards</li>
-            <li><span class="label">Venue</span>${ev.venue}<small>${ev.address}</small></li>
+            <li><span class="label">${t("date")}</span>${formatDate(ev.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</li>
+            <li><span class="label">${t("time")}</span>${t("onwards")(ev.start)}</li>
+            <li><span class="label">${t("venue")}</span>${tr(ev, "venue")}<small>${tr(ev, "address")}</small></li>
           </ul>
           <div class="actions">
-            <a class="btn" href="${ev.map}" target="_blank" rel="noopener">View on Map</a>
-          </div>
-        </article>
-      </section>`;
-    })
-    .join("");
+            <a class="btn" href="${ev.map}" target="_blank" rel="noopener">${t("viewMap")}</a>
+          </div>`;
+  });
+
+  // Static sections name themselves for the dot nav.
+  $("#home").dataset.label = t("home");
+  $("#couple").dataset.label = t("couple");
+  $("#closing").dataset.label = t("regardsTitle");
+  $("#moments").dataset.label = t("moments");
+  const sections = $$("#scroller .section");
+  $$("#dots button").forEach((b, i) => {
+    b.dataset.label = sections[i].dataset.label;
+    b.setAttribute("aria-label", sections[i].dataset.label);
+  });
+
+  const reel = $("#reel");
+  if (reel) $("#reelSound span").textContent = reel.muted ? t("tapSound") : t("soundOn");
+  if ($("#countdown").classList.contains("married")) $("#countdown").textContent = t("married");
+}
+
+function setupLang() {
+  $("#langBtn").addEventListener("click", () => {
+    lang = lang === "en" ? "hi" : "en";
+    try { localStorage.setItem("wedding-lang", lang); } catch {}
+    render();
+  });
 }
 
 /* ---------- Countdown ---------- */
@@ -221,7 +357,7 @@ function startCountdown() {
     const diff = target - Date.now();
     if (diff <= 0) {
       box.classList.add("married");
-      box.textContent = "Just Married!";
+      box.textContent = t("married");
       clearInterval(timer);
       return;
     }
@@ -433,7 +569,7 @@ function setupReel() {
     video.muted = muted;
     btn.classList.toggle("on", !muted);
     btn.setAttribute("aria-label", muted ? "Turn sound on" : "Turn sound off");
-    label.textContent = muted ? "Tap for sound" : "Sound on";
+    label.textContent = muted ? t("tapSound") : t("soundOn");
   };
   const unmute = () => {
     resumeMusic = Music.playing;
@@ -521,7 +657,9 @@ function setupIntro() {
 }
 
 /* ---------- Boot ---------- */
+buildEvents();
 render();
+setupLang();
 startCountdown();
 setupScroll();
 setupIntro();
