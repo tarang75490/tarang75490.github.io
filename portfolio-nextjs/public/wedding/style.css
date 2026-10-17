@@ -256,12 +256,25 @@ body:not(.locked) .scroller { opacity: 1; }
   background:
     radial-gradient(circle at 50% 30%, rgba(217, 180, 90, 0.16), transparent 55%),
     radial-gradient(circle at 50% 60%, #6d1422, var(--maroon-dark) 80%);
+  padding-block: 3rem 5.5rem; /* bottom room for the scroll cue */
 }
 .hero-content { max-width: 640px; }
+.ganesh {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 0.5rem;
+  object-fit: cover;
+  object-position: 50% 45%;
+  /* soft fade into the page instead of a hard edge */
+  -webkit-mask-image: radial-gradient(circle, #000 48%, transparent 72%);
+  mask-image: radial-gradient(circle, #000 48%, transparent 72%);
+  opacity: 0.92;
+}
 .invocation {
   font-size: 1.05rem;
   color: var(--gold);
-  margin-bottom: 1.6rem;
+  margin-bottom: 0.9rem;
 }
 .names {
   font-family: var(--script);
@@ -579,11 +592,14 @@ body:not(.locked) .scroller { opacity: 1; }
 
 /* couple */
 .couple {
+  /* Couple photo, faded under a maroon wash so the gold text stays readable. */
   background:
-    radial-gradient(circle at 50% 50%, rgba(217, 180, 90, 0.14), transparent 60%),
-    linear-gradient(170deg, #4a0a15, var(--maroon-dark));
+    radial-gradient(circle at 50% 50%, rgba(217, 180, 90, 0.12), transparent 60%),
+    linear-gradient(170deg, rgba(74, 10, 21, 0.72), rgba(46, 5, 12, 0.82)),
+    url("assets/images/couple-bg.jpg") center 40% / cover no-repeat,
+    var(--maroon-dark);
 }
-.couple-content { width: 100%; max-width: 640px; padding: 0 0.75rem; }
+.couple-content { width: 100%; max-width: 640px; padding: 0 0.75rem; text-shadow: 0 1px 8px rgba(30, 3, 8, 0.7); }
 .person { margin-top: 1.4rem; }
 .person-name {
   font-family: var(--script);
@@ -609,8 +625,7 @@ body:not(.locked) .scroller { opacity: 1; }
   letter-spacing: 0.06em;
   color: var(--gold);
 }
-.divider.weds { margin: 1.8rem auto 0.3rem; }
-.weds-word { font-family: var(--script); font-size: 2.4rem; line-height: 1.2; color: var(--gold); }
+.weds-word { font-family: var(--script); font-size: 2.4rem; line-height: 1.2; color: var(--gold); margin-top: 1.4rem; }
 html[lang="hi"] .weds-word { font-size: 2rem; }
 /* Devanagari reads smaller than Cinzel caps at the same size. */
 html[lang="hi"] .small-caps { font-size: 1.15em; }
@@ -767,4 +782,18 @@ html[lang="hi"] .script-title { line-height: 1.4; }
 @media (max-width: 480px) {
   .dots { right: 8px; }
   .countdown div { min-width: 60px; }
+}
+
+/* Short phone screens: keep the Home page within one screen. */
+@media (max-height: 760px) {
+  .hero { padding-block: 2rem 4.2rem; }
+  .ganesh { width: 56px; height: 56px; margin-bottom: 0.3rem; }
+  .invocation { margin-bottom: 0.6rem; }
+  .names { font-size: clamp(2.7rem, 12vw, 5rem); margin: 0.4rem 0; }
+  .hero .divider { margin: 0.9rem auto; }
+  .countdown { margin-top: 1.1rem; }
+  .countdown div { padding: 0.45rem 0.3rem; }
+  .countdown b { font-size: 1.35rem; }
+  .scroll-cue { bottom: 1rem; }
+  html[lang="hi"] .names { line-height: 1.25; }
 }
