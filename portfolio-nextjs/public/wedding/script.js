@@ -921,10 +921,11 @@ function setupHearts() {
   const names = $("#home .names");
   const glyphs = ["❤", "❤", "❥", "✿", "❀"];
   const colors = ["#c9184a", "#e05780", "#b8862b", "#d9b45a", "#8a1c2b"];
-  const G = 1400; // px/s²
+  const G = 700; // px/s²
+  const MAX_FALL = 95; // px/s while floating down, so they drift like petals
   const gravity = { x: 0, y: G };
   const bits = [];
-  let canvas, ctx, w = 0, h = 0, running = false, onScreen = true, last = 0, calm = 0;
+  let canvas, ctx, w = 0, h = 0, running = false, onScreen = true, last = 0, calm = 0, simTime = 0;
   let taps = [];
 
   const resize = () => {
@@ -975,11 +976,11 @@ function setupHearts() {
     for (let i = 0; i < 40; i++) {
       const r = 7 + Math.random() * 10;
       bits.push({
-        x: r + Math.random() * (w - 2 * r), y: -r - Math.random() * 240,
-        vx: (Math.random() - 0.5) * 60, vy: Math.random() * 80,
+        x: r + Math.random() * (w - 2 * r), y: -r - Math.random() * 520,
+        vx: (Math.random() - 0.5) * 20, vy: 20 + Math.random() * 30,
         r, rot: Math.random() * 6.3, vr: 0,
         glyph: glyphs[i % glyphs.length], color: colors[Math.floor(Math.random() * colors.length)],
-        inside: false,
+        inside: false, landed: false, phase: Math.random() * 6.3, sway: 18 + Math.random() * 22,
       });
     }
     while (bits.length > 200) bits.shift();
@@ -987,16 +988,24 @@ function setupHearts() {
   };
 
   const step = (dt) => {
+    simTime += dt;
     for (const b of bits) {
       b.vx += gravity.x * dt; b.vy += gravity.y * dt;
       b.vx *= 0.995; b.vy *= 0.995;
+      if (!b.landed) {
+        // floating down: gentle side-to-side sway and a slow terminal speed
+        b.vx += Math.cos(simTime * 2.2 + b.phase) * b.sway * dt * 3;
+        b.vr = Math.sin(simTime * 1.7 + b.phase) * 1.2;
+        if (b.vy > MAX_FALL) b.vy = MAX_FALL;
+        b.vx = Math.max(-60, Math.min(60, b.vx));
+      }
       b.x += b.vx * dt; b.y += b.vy * dt;
       b.rot += b.vr * dt; b.vr *= 0.97;
       if (b.y > b.r) b.inside = true;
       // walls (the top only counts once a piece has fallen in)
-      if (b.x < b.r) { b.x = b.r; b.vx *= -0.3; b.vr += b.vy * 0.01; }
-      if (b.x > w - b.r) { b.x = w - b.r; b.vx *= -0.3; b.vr -= b.vy * 0.01; }
-      if (b.y > h - b.r) { b.y = h - b.r; b.vy *= -0.25; b.vx *= 0.9; b.vr += b.vx * 0.02; }
+      if (b.x < b.r) { b.x = b.r; b.vx *= -0.3; b.vr += b.vy * 0.01; b.landed = b.landed || b.y > h * 0.5; }
+      if (b.x > w - b.r) { b.x = w - b.r; b.vx *= -0.3; b.vr -= b.vy * 0.01; b.landed = b.landed || b.y > h * 0.5; }
+      if (b.y > h - b.r) { b.y = h - b.r; b.vy *= -0.25; b.vx *= 0.9; b.vr += b.vx * 0.02; b.landed = true; }
       if (b.inside && b.y < b.r) { b.y = b.r; b.vy *= -0.25; b.vx *= 0.9; }
     }
     // pieces push each other apart so they stack instead of overlapping
@@ -1011,6 +1020,7 @@ function setupHearts() {
           if (d2 >= min * min || d2 === 0) continue;
           const d = Math.sqrt(d2), push = (min - d) / 2, nx = dx / d, ny = dy / d;
           a.x -= nx * push; a.y -= ny * push; c.x += nx * push; c.y += ny * push;
+          if (a.landed || c.landed) { a.landed = c.landed = true; }
           const rel = (c.vx - a.vx) * nx + (c.vy - a.vy) * ny;
           if (rel < 0) {
             const imp = rel * 0.6;
@@ -1043,7 +1053,7 @@ function setupHearts() {
     step(dt / 2); step(dt / 2);
     draw();
     // go to sleep once everything has settled, to save battery
-    const fast = bits.some((b) => Math.abs(b.vx) + Math.abs(b.vy) > 12);
+    const fast = bits.some((b) => !b.landed || Math.abs(b.vx) + Math.abs(b.vy) > 12);
     calm = fast ? 0 : calm + dt;
     if (calm > 0.8 || !onScreen || document.hidden) { running = false; return; }
     requestAnimationFrame(frame);
