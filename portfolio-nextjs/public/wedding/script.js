@@ -102,7 +102,7 @@ const CONFIG = {
       name: "Shri Shyam Ji Kirtan Night",
       tagline: "An evening of bhajans & devotion",
       date: "2026-11-29",
-      start: "04:00",
+      start: "16:00",
       ...FAMILY_VENUE,
       theme: { bg1: "#0f7c7a", bg2: "#053332", accent: "#f3cf6b", ink: "#eefcfa", card: "rgba(0,0,0,0.25)", btnInk: "#053332" },
     },
