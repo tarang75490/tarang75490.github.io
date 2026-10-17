@@ -568,14 +568,13 @@ const Synth = {
 };
 
 // Two songs crossfade forever: near the end of each, it fades away while the
-// other rises in underneath, with no gap. Volume runs through Web Audio gain
+// other rises in underneath, with no gap. Each <audio> sets its own volume
+// (data-vol) and rise/fade length in seconds (data-fade). Volume runs through Web Audio gain
 // nodes because iPhones ignore <audio>.volume.
 const Music = {
   btn: $("#musicBtn"),
   mode: null, // "file" | "synth"
   playing: false,
-  FADE: 3, // seconds of overlap between songs
-  VOL: 0.6,
   ctx: undefined,
 
   init() {
@@ -634,17 +633,20 @@ const Music = {
     this.current = i;
     this.active.add(el);
     const p = el.play();
-    this.fade(i, this.VOL, fadeIn);
+    this.fade(i, this.vol(i), fadeIn);
     return p;
   },
+  vol(i) { return Number(this.players[i].dataset.vol) || 0.6; },
+  fadeLen(i) { return Number(this.players[i].dataset.fade) || 3; },
   tick() {
     if (!this.playing || this.mode !== "file" || this.crossing) return;
     const el = this.players[this.current];
     if (!el.duration || isNaN(el.duration)) return;
-    if (el.duration - el.currentTime <= this.FADE) {
+    const out = this.fadeLen(this.current), next = 1 - this.current;
+    if (el.duration - el.currentTime <= out) {
       this.crossing = true;
-      this.fade(this.current, 0, this.FADE);           // this song fades away...
-      this.startTrack(1 - this.current, this.FADE).catch(() => {}); // ...while the next one rises
+      this.fade(this.current, 0, out);                            // this song fades away...
+      this.startTrack(next, this.fadeLen(next)).catch(() => {});  // ...while the next one rises
     }
   },
 
