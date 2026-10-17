@@ -152,7 +152,7 @@ function mandalaSVG() {
 /* ---------- Render content ---------- */
 function render() {
   const { groom, bride, contacts } = CONFIG;
-  document.title = `${groom.first} & ${bride.first} · Wedding Invitation`;
+  document.title = `${groom.first} & ${bride.first} · ${isFamily ? "Family" : "Wedding"} Invitation`;
   const fill = (attr, text) => $$(`[${attr}]`).forEach((el) => (el.textContent = text));
   fill("data-groom", groom.first);
   fill("data-bride", bride.first);
