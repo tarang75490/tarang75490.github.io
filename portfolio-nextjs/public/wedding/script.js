@@ -341,11 +341,17 @@ function render() {
 }
 
 function setupLang() {
-  $("#langBtn").addEventListener("click", () => {
+  const btn = $("#langBtn");
+  btn.addEventListener("click", () => {
     lang = lang === "en" ? "hi" : "en";
     try { localStorage.setItem("wedding-lang", lang); } catch {}
     render();
   });
+  // Show the switch only while the Home page is on screen.
+  new IntersectionObserver(([entry]) => btn.classList.toggle("away", !entry.isIntersecting), {
+    root: $("#scroller"),
+    threshold: 0.5,
+  }).observe($("#home"));
 }
 
 /* ---------- Countdown ---------- */
