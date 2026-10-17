@@ -27,31 +27,40 @@
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="style.css?v=25" />
+  <link rel="stylesheet" href="style.css?v=47" />
 </head>
 <body class="locked">
 
   <button id="langBtn" class="lang-btn" aria-label="Switch language / भाषा बदलें"><span data-lang="en">English</span><i>|</i><span data-lang="hi" lang="hi">हिंदी</span></button>
 
-  <!-- ===== Opening envelope ===== -->
+  <!-- ===== Opening envelope (fills the whole screen) ===== -->
   <div id="intro" class="intro">
-    <p class="intro-top" data-i18n="invited">You are cordially invited</p>
-
     <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open the invitation">
-      <div class="env-back"></div>
-      <div class="letter">
-        <div class="letter-inner">
-          <span class="letter-small" data-i18n="families">Together with their families</span>
+      <div class="env-lining"></div>
+
+      <div class="env-card">
+        <div class="env-card-inner">
+          <img class="env-ganesh" src="assets/images/ganesh-gold.png" alt="" width="239" height="503" />
+          <p class="env-card-small" data-i18n="invocation">॥ Shri Ganeshaya Namah ॥</p>
+          <p class="env-card-small" data-i18n="families">Together with their families</p>
           <h2 class="letter-names"><span data-groom></span><em>&amp;</em><span data-bride></span></h2>
-          <span class="letter-small" data-date-short></span>
+          <p class="env-card-small" data-date-short></p>
         </div>
       </div>
-      <div class="env-pocket"></div>
-      <div class="env-flap"></div>
-      <div class="seal"><span data-initials></span></div>
-    </div>
 
-    <p class="intro-hint" data-i18n="tapSeal">Tap the seal to open</p>
+      <div class="env-pocket">
+        <div class="flap-wrap side"><div class="flap flap-left" data-botanical="11"></div></div>
+        <div class="flap-wrap side"><div class="flap flap-right" data-botanical="29"></div></div>
+        <div class="flap-wrap bottom"><div class="flap flap-bottom" data-botanical="47"></div></div>
+      </div>
+      <div class="env-flap"><div class="flap flap-top" data-botanical="83"></div></div>
+
+      <div class="seal">
+        <img src="assets/images/wax-seal-gold.png" alt="" width="340" height="338" />
+      </div>
+
+      <p class="intro-hint" data-i18n="tapSeal">Tap the seal to open</p>
+    </div>
   </div>
 
   <!-- Falling petals -->
@@ -61,9 +70,12 @@
   <main id="scroller" class="scroller" aria-hidden="true">
 
     <section id="home" class="section hero" data-label="Home">
+      <div class="hero-mandala" aria-hidden="true"></div>
       <div class="frame"></div>
+      <i class="corner tl" aria-hidden="true"></i><i class="corner tr" aria-hidden="true"></i>
+      <i class="corner bl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
       <div class="hero-content reveal">
-        <img class="ganesh" src="assets/images/ganesh.jpg" alt="Shri Ganesh" width="64" height="64" />
+        <img class="ganesh" src="assets/images/ganesh-gold.png" alt="Shri Ganesh" width="239" height="503" />
         <p class="invocation" data-i18n="invocation">॥ Shri Ganeshaya Namah ॥</p>
         <p class="small-caps" data-i18n="families">Together with their families</p>
         <h1 class="names">
@@ -165,6 +177,6 @@
   <!-- Put your song at assets/music/background.mp3. If it's missing, a soft built-in melody plays instead. -->
   <audio id="bgm" src="assets/music/background.mp3" loop preload="auto"></audio>
 
-  <script src="script.js?v=19"></script>
+  <script src="script.js?v=33"></script>
 </body>
 </html>

@@ -631,6 +631,106 @@ function setupReel() {
   document.addEventListener("visibilitychange", () => document.hidden && video.pause());
 }
 
+/* ---------- Envelope artwork ---------- */
+// Tone-on-tone ferns, feathery plumes and veined leaves, embossed into the
+// envelope paper with a lighting filter. Seeded so it looks the same on every
+// visit, and rendered as a background image so it costs nothing while animating.
+function botanicalSVG(seed) {
+  let state = seed;
+  const rnd = () => (state = (state * 16807) % 2147483647) / 2147483647;
+  const f = (n) => n.toFixed(1);
+  const leaf = (len, w = 0.26) => `M0 0C${f(len * 0.3)} ${f(-len * w)} ${f(len * 0.75)} ${f(-len * w * 0.8)} ${f(len)} 0C${f(len * 0.75)} ${f(len * w * 0.8)} ${f(len * 0.3)} ${f(len * w)} 0 0Z`;
+  // point and direction along the quadratic stem M0 0 Q bend,-len/2 0,-len
+  const along = (t, len, bend) => ({
+    x: 2 * bend * t * (1 - t),
+    y: -len * t,
+    a: (Math.atan2(-len, 2 * bend * (1 - 2 * t)) * 180) / Math.PI,
+  });
+
+  const fern = (len, bend) => {
+    let g = `<path d="M0 0Q${f(bend)} ${f(-len / 2)} 0 ${f(-len)}" fill="none" stroke-width="1.2"/>`;
+    const pairs = 20 + Math.floor(rnd() * 8);
+    for (let k = 1; k <= pairs; k++) {
+      const t = k / (pairs + 1), p = along(t, len, bend);
+      const size = (1 - t * 0.7) * (26 + rnd() * 10);
+      for (const side of [-1, 1]) {
+        const rot = p.a + side * (62 + rnd() * 10);
+        g += `<g transform="translate(${f(p.x)} ${f(p.y)}) rotate(${f(rot)})"><path d="${leaf(size, 0.16)}"/><path d="M0 0L${f(size * 0.9)} 0" fill="none" stroke-width="0.4"/></g>`;
+      }
+    }
+    return g;
+  };
+
+  const plume = (len, bend) => {
+    let g = `<path d="M0 0Q${f(bend)} ${f(-len / 2)} 0 ${f(-len)}" fill="none" stroke-width="1"/>`;
+    const hairs = 110 + Math.floor(rnd() * 40);
+    for (let k = 0; k < hairs; k++) {
+      const t = 0.08 + (k / hairs) * 0.92, p = along(t, len, bend);
+      const hl = (1 - t * 0.55) * (16 + rnd() * 14);
+      for (const side of [-1, 1]) {
+        const a = ((p.a + side * (28 + rnd() * 26)) * Math.PI) / 180;
+        const ex = p.x + Math.cos(a) * hl, ey = p.y + Math.sin(a) * hl;
+        const cx = p.x + Math.cos(a) * hl * 0.5 + side * 1.5, cy = p.y + Math.sin(a) * hl * 0.5;
+        g += `<path d="M${f(p.x)} ${f(p.y)}Q${f(cx)} ${f(cy)} ${f(ex)} ${f(ey)}" fill="none" stroke-width="0.55"/>`;
+      }
+    }
+    return g;
+  };
+
+  const leafy = (len, bend) => {
+    let g = `<path d="M0 0Q${f(bend)} ${f(-len / 2)} 0 ${f(-len)}" fill="none" stroke-width="1.3"/>`;
+    const count = 6 + Math.floor(rnd() * 5);
+    for (let k = 1; k <= count; k++) {
+      const t = k / (count + 1), p = along(t, len, bend);
+      const size = (1 - t * 0.45) * (32 + rnd() * 16);
+      const side = k % 2 ? 1 : -1;
+      let veins = `<path d="M0 0L${f(size * 0.92)} 0" fill="none" stroke-width="0.5"/>`;
+      for (let v = 1; v <= 4; v++) {
+        const vx = size * (v / 5.2), vl = size * 0.16 * (1 - v / 6);
+        veins += `<path d="M${f(vx)} 0l${f(vl)} ${f(-vl)}M${f(vx)} 0l${f(vl)} ${f(vl)}" fill="none" stroke-width="0.35"/>`;
+      }
+      g += `<g transform="translate(${f(p.x)} ${f(p.y)}) rotate(${f(p.a + side * (48 + rnd() * 18))})"><path d="${leaf(size)}"/>${veins}</g>`;
+    }
+    return g + `<g transform="translate(0 ${f(-len)}) rotate(-90)"><path d="${leaf(16)}"/></g>`;
+  };
+
+  let sprigs = "";
+  // one sprig per cell of a loose 3x5 grid, so they spread evenly but look random
+  for (let i = 0; i < 15; i++) {
+    const x = ((i % 3) + 0.15 + rnd() * 0.7) * (400 / 3);
+    const y = (Math.floor(i / 3) + 0.15 + rnd() * 0.7) * (800 / 5);
+    const angle = rnd() * 360;
+    const len = 210 + rnd() * 230, bend = (rnd() - 0.5) * 110;
+    const kind = rnd();
+    const body = kind < 0.4 ? fern(len, bend) : kind < 0.7 ? plume(len, bend) : leafy(len, bend);
+    sprigs += `<g transform="translate(${f(x)} ${f(y)}) rotate(${f(angle)})">${body}</g>`;
+  }
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
+    <defs><filter id="e" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.7" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="3" specularConstant="0.6" specularExponent="14" lighting-color="#ffd8cc" result="spec">
+        <feDistantLight azimuth="235" elevation="38"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="shine"/>
+      <feOffset in="SourceAlpha" dx="0.9" dy="1.2" result="off"/>
+      <feGaussianBlur in="off" stdDeviation="0.6" result="offBlur"/>
+      <feFlood flood-color="#120003" flood-opacity="0.6"/>
+      <feComposite in2="offBlur" operator="in" result="shadow"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/><feMergeNode in="shine"/></feMerge>
+    </filter></defs>
+    <g fill="rgba(25,0,5,0.16)" stroke="rgba(25,0,5,0.32)" stroke-linecap="round" filter="url(#e)">${sprigs}</g></svg>`;
+}
+
+function drawEnvelope() {
+  $$("[data-botanical]").forEach((el) => {
+    const art = document.createElement("div");
+    art.className = "botanical";
+    art.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(botanicalSVG(Number(el.dataset.botanical)))}")`;
+    el.appendChild(art);
+  });
+}
+
 /* ---------- Opening sequence ---------- */
 function setupIntro() {
   const intro = $("#intro");
@@ -644,7 +744,7 @@ function setupIntro() {
     intro.classList.add("opening");
     envelope.classList.add("open");
 
-    setTimeout(() => intro.classList.add("zoom"), 1900);
+    setTimeout(() => intro.classList.add("zoom"), 1350);
     setTimeout(() => {
       intro.classList.add("done");
       document.body.classList.remove("locked");
@@ -652,8 +752,8 @@ function setupIntro() {
       $("#dots").hidden = false;
       Music.btn.hidden = false;
       startPetals();
-    }, 2700);
-    setTimeout(() => intro.remove(), 3800);
+    }, 2450);
+    setTimeout(() => intro.remove(), 3500);
   };
 
   envelope.addEventListener("click", open);
@@ -663,6 +763,8 @@ function setupIntro() {
 }
 
 /* ---------- Boot ---------- */
+drawEnvelope();
+$(".hero-mandala").innerHTML = mandalaSVG();
 buildEvents();
 render();
 setupLang();
