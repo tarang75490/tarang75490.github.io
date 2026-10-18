@@ -87,7 +87,7 @@ const CONFIG = {
       tagline: "A splash of turmeric, a lot of laughter",
       taglineHi: "हल्दी का रंग, ढेर सारी हँसी",
       date: "2026-12-02",
-      start: "09:15",
+      start: "11:00",
       ...VENUE,
       theme: { bg1: "#fbe06b", bg2: "#f0a020", accent: "#8a4300", ink: "#4a2600", card: "rgba(255,250,235,0.72)", btnInk: "#fff8e6" },
     },
