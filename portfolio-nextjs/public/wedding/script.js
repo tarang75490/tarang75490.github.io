@@ -919,86 +919,6 @@ function drawEnvelope() {
   });
 }
 
-/* ---------- Seal crack: sound + gold dust ---------- */
-// A short, soft "crack" made with Web Audio (no audio file needed).
-function playCrack() {
-  const ctx = Synth.ctx;
-  if (!ctx) return;
-  ctx.resume();
-  const t = ctx.currentTime + 0.03;
-  const len = Math.floor(ctx.sampleRate * 0.12);
-  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-  const data = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
-  const noise = ctx.createBufferSource();
-  noise.buffer = buf;
-  const band = ctx.createBiquadFilter();
-  band.type = "bandpass";
-  band.frequency.value = 1800;
-  band.Q.value = 0.9;
-  const g = ctx.createGain();
-  g.gain.value = 0.35;
-  noise.connect(band).connect(g).connect(ctx.destination);
-  noise.start(t);
-  // a low, soft thud underneath
-  const o = ctx.createOscillator();
-  const og = ctx.createGain();
-  o.frequency.setValueAtTime(140, t);
-  o.frequency.exponentialRampToValueAtTime(60, t + 0.12);
-  og.gain.setValueAtTime(0.25, t);
-  og.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
-  o.connect(og).connect(ctx.destination);
-  o.start(t);
-  o.stop(t + 0.2);
-}
-
-// Gold sparkles bursting out of the seal as it breaks.
-function goldDust() {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const envelope = $("#envelope");
-  const c = document.createElement("canvas");
-  c.className = "gold-dust";
-  envelope.appendChild(c);
-  const rect = envelope.getBoundingClientRect();
-  const dpr = Math.min(devicePixelRatio || 1, 2);
-  c.width = rect.width * dpr;
-  c.height = rect.height * dpr;
-  const ctx = c.getContext("2d");
-  ctx.scale(dpr, dpr);
-  const seal = $(".seal").getBoundingClientRect();
-  const cx = seal.left + seal.width / 2 - rect.left, cy = seal.top + seal.height / 2 - rect.top;
-  const bits = [];
-  for (let i = 0; i < 110; i++) {
-    const a = Math.random() * Math.PI * 2, v = 60 + Math.random() * 230;
-    bits.push({
-      x: cx + Math.cos(a) * seal.width * 0.2, y: cy + Math.sin(a) * seal.height * 0.2,
-      vx: Math.cos(a) * v, vy: Math.sin(a) * v - 60,
-      r: 0.8 + Math.random() * 2.2, life: 1, decay: 0.55 + Math.random() * 0.5,
-      light: 55 + Math.random() * 30, tw: Math.random() * 6,
-    });
-  }
-  let last = performance.now();
-  const frame = (now) => {
-    const dt = Math.min((now - last) / 1000, 0.05);
-    last = now;
-    ctx.clearRect(0, 0, rect.width, rect.height);
-    let alive = 0;
-    for (const b of bits) {
-      if (b.life <= 0) continue;
-      alive++;
-      b.vx *= 0.96; b.vy = b.vy * 0.96 + 40 * dt;
-      b.x += b.vx * dt; b.y += b.vy * dt;
-      b.life -= b.decay * dt;
-      const flicker = 0.6 + 0.4 * Math.sin(now / 60 + b.tw);
-      ctx.fillStyle = `hsla(43, 85%, ${b.light}%, ${Math.max(b.life, 0) * flicker})`;
-      ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7); ctx.fill();
-    }
-    if (alive) requestAnimationFrame(frame);
-    else c.remove();
-  };
-  requestAnimationFrame(frame);
-}
-
 /* ---------- Hidden hearts ---------- */
 // Tap the couple's names three times on the Home page for a shower of hearts and
 // flowers that fall and pile up along the bottom of the page. Each shower adds to
@@ -1047,6 +967,61 @@ function setupHearts() {
   });
 }
 
+/* ---------- Auto-advance ---------- */
+// Moves to the next page every 5 s, stopping at the last one. Any touch, scroll
+// wheel or key press pauses it; it restarts 3.5 s after the guest stops.
+const AutoAdvance = {
+  DELAY: 5000,
+  IDLE: 3500, // wait after the guest stops touching before the 5 s bar restarts
+  timer: null,
+  idleTimer: null,
+  start() {
+    this.scroller = $("#scroller");
+    this.sections = $$(".section", this.scroller);
+    this.bar = $("#autoBar");
+    this.bar.style.setProperty("--auto-ms", `${this.DELAY}ms`);
+    const pause = () => this.pauseForUser();
+    ["touchstart", "wheel", "mousedown", "keydown"].forEach((ev) =>
+      addEventListener(ev, pause, { passive: true }));
+    document.addEventListener("visibilitychange", () => (document.hidden ? this.stop() : this.schedule()));
+    this.schedule();
+  },
+  currentIndex() {
+    const top = this.scroller.scrollTop;
+    let best = 0;
+    this.sections.forEach((sec, i) => {
+      if (Math.abs(sec.offsetTop - top) < Math.abs(this.sections[best].offsetTop - top)) best = i;
+    });
+    return best;
+  },
+  schedule() {
+    this.stop();
+    if (document.hidden || this.idleTimer) return;
+    if (this.currentIndex() >= this.sections.length - 1) return; // last page: stay
+    // restart the progress bar
+    this.bar.hidden = false;
+    this.bar.classList.remove("run");
+    void this.bar.offsetWidth;
+    this.bar.classList.add("run");
+    this.timer = setTimeout(() => {
+      const next = this.sections[this.currentIndex() + 1];
+      if (next) next.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => this.schedule(), 900); // after the scroll settles
+    }, this.DELAY);
+  },
+  stop() {
+    clearTimeout(this.timer);
+    this.timer = null;
+    this.bar.classList.remove("run");
+    this.bar.hidden = true;
+  },
+  pauseForUser() {
+    this.stop();
+    clearTimeout(this.idleTimer);
+    this.idleTimer = setTimeout(() => { this.idleTimer = null; this.schedule(); }, this.IDLE);
+  },
+};
+
 /* ---------- Opening sequence ---------- */
 function setupIntro() {
   const intro = $("#intro");
@@ -1057,10 +1032,8 @@ function setupIntro() {
     if (opened) return;
     opened = true;
     Music.start();
-    playCrack();
     intro.classList.add("opening");
     envelope.classList.add("open");
-    setTimeout(goldDust, 180);
 
     setTimeout(() => intro.classList.add("zoom"), 1550);
     setTimeout(() => {
@@ -1070,6 +1043,7 @@ function setupIntro() {
       $("#dots").hidden = false;
       Music.btn.hidden = false;
       startPetals();
+      AutoAdvance.start();
     }, 2650);
     setTimeout(() => intro.remove(), 3700);
   };

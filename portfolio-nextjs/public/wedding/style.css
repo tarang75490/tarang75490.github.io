@@ -171,14 +171,6 @@ a { color: inherit; }
 }
 .seal { aspect-ratio: 340 / 338; }
 .seal img { width: 100%; height: auto; display: block; }
-/* the seal is two halves of the same image, split along a jagged crack */
-.seal-half {
-  position: absolute;
-  inset: 0;
-  transition: transform 0.9s cubic-bezier(.3, .1, .6, 1) 0.2s, opacity 0.7s ease 0.45s;
-}
-.seal-half.left { clip-path: polygon(0 0, 52% 0, 47% 17%, 55% 33%, 46% 50%, 54% 68%, 47% 85%, 51% 100%, 0 100%); }
-.seal-half.right { clip-path: polygon(52% 0, 100% 0, 100% 100%, 51% 100%, 47% 85%, 54% 68%, 46% 50%, 55% 33%, 47% 17%); }
 .envelope:focus-visible .seal { outline: 2px solid var(--gold-light); outline-offset: 4px; border-radius: 50%; }
 
 .intro-hint {
@@ -196,17 +188,13 @@ a { color: inherit; }
 .intro.opening .intro-hint { opacity: 0; animation: none; transition: opacity 0.4s; }
 
 /* open sequence: seal pops, top flap lifts, card rises, then fills the screen */
-/* the seal shudders, cracks, and its halves fall away; then the flaps open */
-.envelope.open .seal { animation: sealCrack 0.22s ease-in-out; }
-.envelope.open .seal-half.left { transform: translate(-38%, 55%) rotate(-28deg); opacity: 0; }
-.envelope.open .seal-half.right { transform: translate(38%, 60%) rotate(24deg); opacity: 0; }
-@keyframes sealCrack {
-  0%, 100% { transform: none; }
-  25% { transform: rotate(-3deg) scale(1.03); }
-  60% { transform: rotate(3deg) scale(1.03); }
+/* the seal is lifted off the paper in one piece (it rises, tilts and floats away); then the flaps open */
+.envelope.open .seal { animation: sealLift 0.85s cubic-bezier(.4, 0, .3, 1) forwards; }
+@keyframes sealLift {
+  0% { transform: none; filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.55)); opacity: 1; }
+  35% { transform: translateY(-4%) scale(1.07) rotate(-4deg); filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.45)); opacity: 1; }
+  100% { transform: translateY(-120%) scale(1.12) rotate(-12deg); filter: drop-shadow(0 34px 30px rgba(0, 0, 0, 0.25)); opacity: 0; }
 }
-/* gold dust that bursts from the seal */
-.gold-dust { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 7; pointer-events: none; }
 .envelope.open .env-flap { transform: rotateX(180deg); }
 .envelope.open .flap-wrap:nth-child(1) { transform: rotateY(-180deg); }
 .envelope.open .flap-wrap:nth-child(2) { transform: rotateY(180deg); }
@@ -809,6 +797,26 @@ html[lang="hi"] .script-title { line-height: 1.4; }
   95% { transform: translate3d(var(--drift), calc(var(--land) - 5px), 0) rotate(var(--spin)) scale(1); }
   100% { transform: translate3d(var(--drift), var(--land), 0) rotate(var(--spin)) scale(1); opacity: 1; }
 }
+
+/* ================= Auto-advance progress bar ================= */
+.auto-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  z-index: 35;
+  pointer-events: none;
+  background: rgba(217, 180, 90, 0.18);
+}
+.auto-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #b8862b, #f1d27a);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.auto-bar.run i { transform: scaleX(1); transition: transform var(--auto-ms, 5000ms) linear; }
 
 /* ================= Keyframes ================= */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
