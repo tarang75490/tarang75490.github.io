@@ -822,7 +822,7 @@ html[lang="hi"] .script-title { line-height: 1.4; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
 @keyframes floatIn { from { opacity: 0; transform: translateY(40px) scale(0.92); } to { opacity: 1; transform: none; } }
-@keyframes pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+@keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 @keyframes sealGlow {
   0%, 100% { box-shadow: 0 3px 8px rgba(0,0,0,.45), inset 0 0 0 4px rgba(143,106,28,.6), 0 0 0 0 rgba(243,220,154,.5); }
   50% { box-shadow: 0 3px 8px rgba(0,0,0,.45), inset 0 0 0 4px rgba(143,106,28,.6), 0 0 0 12px rgba(243,220,154,0); }
@@ -906,7 +906,7 @@ body:not(.locked) .hero::after { animation: sheen 2.2s ease-out 0.6s 1 both; }
 .hero .small-caps { color: var(--ink-soft); }
 .hero .names {
   color: transparent;
-  background: linear-gradient(100deg, #7d520f 0%, #c49233 22%, #f1d27a 38%, #b98428 52%, #7d520f 70%, #c9a24a 88%, #7d520f 100%);
+  background: linear-gradient(100deg, #6b450b 0%, #a8781f 22%, #c4923a 38%, #a3741c 52%, #6b450b 70%, #ad7f2a 88%, #6b450b 100%);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -961,3 +961,20 @@ body:not(.locked) .hero .reveal.visible > * { opacity: 1; transform: none; }
   .scroll-cue { bottom: 1rem; }
   html[lang="hi"] .names { line-height: 1.25; }
 }
+
+/* ================= Readability ================= */
+/* Larger, less widely spaced labels; slightly heavier body text; clearer details. */
+.small-caps { font-size: clamp(0.8rem, 3.3vw, 0.95rem); letter-spacing: 0.16em; }
+.env-card-small { font-size: clamp(0.74rem, 3vw, 0.86rem); letter-spacing: 0.13em; }
+.event-count { font-size: 0.8rem; letter-spacing: 0.18em; }
+.countdown span { font-size: 0.8rem; letter-spacing: 0.1em; opacity: 1; }
+.contact-footer .small-caps { font-size: 0.78rem; }
+
+.invite-line, .hero-city, .person-line, .closing, .event-tagline, .contact { font-weight: 500; }
+
+/* function details: date, time, venue */
+.event-details { gap: 1.05rem; }
+.event-details li { font-size: 1.28rem; line-height: 1.35; font-weight: 600; }
+.event-details .label { font-size: 0.8rem; letter-spacing: 0.16em; font-weight: 600; margin-bottom: 0.2rem; }
+.event-details small { font-size: 1.05rem; font-weight: 500; opacity: 0.92; margin-top: 0.1rem; }
+
