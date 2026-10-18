@@ -968,11 +968,11 @@ function setupHearts() {
 }
 
 /* ---------- Auto-advance ---------- */
-// Moves to the next page every 5 s, stopping at the last one. Any touch, scroll
+// Moves to the next page every 15 s, stopping at the last one. Any touch, scroll
 // wheel or key press pauses it; it restarts 3.5 s after the guest stops.
 const AutoAdvance = {
-  DELAY: 5000,
-  IDLE: 3500, // wait after the guest stops touching before the 5 s bar restarts
+  DELAY: 15000,
+  IDLE: 3500, // wait after the guest stops touching before the 15 s bar restarts
   timer: null,
   idleTimer: null,
   start() {
