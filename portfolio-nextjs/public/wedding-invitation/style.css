@@ -996,3 +996,5 @@ body:not(.locked) .hero .reveal.visible > * { opacity: 1; transform: none; }
 #haldi .page-ganesh { filter: brightness(0.5) saturate(1.3); }
 /* the line under each function's name: semi-bold and full strength */
 .event-tagline { font-weight: 600; opacity: 1; }
+/* cream on the saffron Ganesh Puja and Mangal Pheras pages, where gold fades in */
+#ganesh-puja .page-ganesh, #pheras .page-ganesh { filter: brightness(0) invert(1) sepia(0.3); }
