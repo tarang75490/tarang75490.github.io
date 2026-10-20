@@ -8,7 +8,8 @@ const VENUE = {
   venueHi: "द लंकावी रिज़ॉर्ट",
   address: "Bariatu, Ranchi, 834009",
   addressHi: "बरियातू, राँची 834009",
-  map: "https://share.google/zkD2DEFbRsMNBRoNX",
+  // "Get Directions" opens Google Maps with a route from the guest's current location.
+  destination: "The Langkawi Resort, Bariatu, Ranchi",
 };
 
 const FAMILY_VENUE = {
@@ -16,7 +17,7 @@ const FAMILY_VENUE = {
   venueHi: "नंद निवास, पवन इंडस्ट्रीज़",
   address: "Radha Marg, Agrasen Path, Upper Bazar, Ranchi, Jharkhand 834001",
   addressHi: "राधा मार्ग, अग्रसेन पथ, अपर बाज़ार, राँची, झारखंड 834001",
-  map: "https://www.google.com/maps/place/Shree+Shyam+Mandir,+Agrasen+Marg,+Ranchi/@23.3701995,85.3148425,18.59z/data=!4m14!1m7!3m6!1s0x39f4e16d3eaefb4d:0xb233169bf6a1f09b!2sShree+Shyam+Mandir,+Harmu+Road,+RANCHI!8m2!3d23.3719925!4d85.3128086!16s%2Fg%2F11js_97ntc!3m5!1s0x39f4e102c68f36af:0xb24a68b19ed03ce!8m2!3d23.3709944!4d85.3153848!16s%2Fg%2F1pyqh90_5",
+  destination: "Radha Marg, Upper Bazar, Ranchi, Jharkhand 834001", // the place from the Google Maps link the family shared
 };
 
 const CONFIG = {
@@ -185,11 +186,13 @@ const STRINGS = {
     count: (i, n) => `Celebration ${i} of ${n}`,
     date: "Date", time: "Time", venue: "Venue",
     onwards: (hhmm) => `${formatTime(hhmm)} onwards`,
-    viewMap: "View on Map",
+    viewMap: "Get Directions",
     regardsTitle: "Warm Regards",
     follow: "Follow our journey",
     queries: "For any queries",
     glimpse: "A glimpse of us",
+    glimpse2: "A little more of us",
+    moreMoments: "More Moments",
     moments: "Our Moments",
     tapSound: "Tap for sound", soundOn: "Sound on",
     home: "Home", couple: "The Couple",
@@ -213,11 +216,13 @@ const STRINGS = {
       const part = h < 12 ? "सुबह" : h < 16 ? "दोपहर" : h < 20 ? "शाम" : "रात";
       return `${part} ${h % 12 || 12}:${String(m).padStart(2, "0")} बजे से`;
     },
-    viewMap: "नक्शे पर देखें",
+    viewMap: "रास्ता देखें",
     regardsTitle: "विनीत",
     follow: "हमारे सफ़र से जुड़े रहें",
     queries: "किसी भी जानकारी हेतु संपर्क करें",
     glimpse: "हमारी एक झलक",
+    glimpse2: "हमारी कुछ और झलकियाँ",
+    moreMoments: "कुछ और ख़ास पल",
     moments: "हमारे ख़ास पल",
     tapSound: "आवाज़ के लिए छुएँ", soundOn: "आवाज़ चालू",
     home: "मुखपृष्ठ", couple: "वर-वधू",
@@ -334,7 +339,7 @@ function render() {
             <li><span class="label">${t("venue")}</span>${tr(ev, "venue")}<small>${tr(ev, "address")}</small></li>
           </ul>
           <div class="actions">
-            <a class="btn" href="${ev.map}" target="_blank" rel="noopener">${t("viewMap")}</a>
+            <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(ev.destination)}" target="_blank" rel="noopener">${t("viewMap")}</a>
           </div>`;
   });
 
@@ -343,14 +348,16 @@ function render() {
   $("#couple").dataset.label = t("couple");
   $("#closing").dataset.label = t("regardsTitle");
   $("#moments").dataset.label = t("moments");
+  $("#moments-2").dataset.label = t("moreMoments");
   const sections = $$("#scroller .section");
   $$("#dots button").forEach((b, i) => {
     b.dataset.label = sections[i].dataset.label;
     b.setAttribute("aria-label", sections[i].dataset.label);
   });
 
-  const reel = $("#reel");
-  if (reel) $("#reelSound span").textContent = reel.muted ? t("tapSound") : t("soundOn");
+  $$(".reel-wrap").forEach((w) => {
+    $(".reel-sound span", w).textContent = $("video", w).muted ? t("tapSound") : t("soundOn");
+  });
   if ($("#countdown").classList.contains("married")) $("#countdown").textContent = t("married");
 }
 
@@ -761,12 +768,15 @@ function setupScroll() {
 /* ---------- Reel ---------- */
 // Plays muted while in view. Turning its sound on pauses the background
 // music, which comes back when the reel is muted or scrolled away from.
-function setupReel() {
-  const video = $("#reel");
-  if (!video) return;
-  const wrap = $(".reel-wrap");
-  const btn = $("#reelSound");
-  const fullBtn = $("#reelFull");
+// Each "Our Moments" page has its own reel with the same controls.
+function setupReels() {
+  $$(".reel-wrap").forEach(setupReel);
+}
+
+function setupReel(wrap) {
+  const video = $("video", wrap);
+  const btn = $(".reel-sound", wrap);
+  const fullBtn = $(".reel-full", wrap);
   const label = $("span", btn);
   let resumeMusic = false;
 
@@ -979,18 +989,19 @@ function setupHearts() {
 }
 
 /* ---------- Auto-advance ---------- */
-// Moves to the next page every 8 s, stopping at the last one. Any touch, scroll
+// Moves to the next page after 5 s (longer on the pages in DELAYS), stopping at the last one. Any touch, scroll
 // wheel or key press pauses it; it restarts 3.5 s after the guest stops.
 const AutoAdvance = {
-  DELAY: 8000,
-  IDLE: 3500, // wait after the guest stops touching before the 8 s bar restarts
+  DELAY: 5000,
+  // pages that stay up longer, by section id; the first reel (20.6 s) plays through once
+  DELAYS: { couple: 8000, moments: 21000 },
+  IDLE: 3500, // wait after the guest stops touching before the bar restarts
   timer: null,
   idleTimer: null,
   start() {
     this.scroller = $("#scroller");
     this.sections = $$(".section", this.scroller);
     this.bar = $("#autoBar");
-    this.bar.style.setProperty("--auto-ms", `${this.DELAY}ms`);
     const pause = () => this.pauseForUser();
     ["touchstart", "wheel", "mousedown", "keydown"].forEach((ev) =>
       addEventListener(ev, pause, { passive: true }));
@@ -1009,7 +1020,9 @@ const AutoAdvance = {
     this.stop();
     if (document.hidden || this.idleTimer) return;
     if (this.currentIndex() >= this.sections.length - 1) return; // last page: stay
+    const delay = this.DELAYS[this.sections[this.currentIndex()].id] || this.DELAY;
     // restart the progress bar
+    this.bar.style.setProperty("--auto-ms", `${delay}ms`);
     this.bar.hidden = false;
     this.bar.classList.remove("run");
     void this.bar.offsetWidth;
@@ -1018,7 +1031,7 @@ const AutoAdvance = {
       const next = this.sections[this.currentIndex() + 1];
       if (next) next.scrollIntoView({ behavior: "smooth" });
       setTimeout(() => this.schedule(), 900); // after the scroll settles
-    }, this.DELAY);
+    }, delay);
   },
   stop() {
     clearTimeout(this.timer);
@@ -1072,7 +1085,7 @@ $(".hero-mandala").innerHTML = mandalaSVG();
 buildEvents();
 // A small Ganesh ji at the top of every page after Home (which has its own).
 $$("#scroller .section:not(#home)").forEach((s) =>
-  s.insertAdjacentHTML("afterbegin", '<img class="page-ganesh" src="assets/images/ganesh-gold.png" alt="" width="239" height="503" />')
+  s.insertAdjacentHTML("afterbegin", '<img class="page-ganesh" src="assets/images/ganesh-seated.png" alt="" width="176" height="244" />')
 );
 render();
 setupLang();
@@ -1081,7 +1094,7 @@ setupScroll();
 setupIntro();
 Music.init();
 Music.btn.addEventListener("click", () => Music.toggle());
-setupReel();
+setupReels();
 
 // Pause when the tab is hidden, resume when it comes back.
 let resumeOnShow = false;
