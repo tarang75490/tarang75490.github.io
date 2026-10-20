@@ -98,7 +98,7 @@ const CONFIG = {
       tagline: "The groom sets out with music & dhol",
       taglineHi: "ढोल-नगाड़ों के संग दूल्हे राजा की रवानगी",
       date: "2026-12-02",
-      start: "17:30",
+      start: "17:00",
       main: true,
       ...VENUE,
       theme: { bg1: "#a3172b", bg2: "#3d040d", accent: "#f3cf6b", ink: "#fdf6e3", card: "rgba(0,0,0,0.25)", btnInk: "#3d040d" },
@@ -114,9 +114,20 @@ const CONFIG = {
       ...VENUE,
       theme: { bg1: "#16305e", bg2: "#040a1a", accent: "#d9b45a", ink: "#eef2ff", card: "rgba(255,255,255,0.06)", btnInk: "#040a1a" },
     },
+    {
+      id: "pheras",
+      name: "Mangal Pheras",
+      nameHi: "मंगल फेरे",
+      tagline: "Seven sacred vows around the holy fire",
+      taglineHi: "पवित्र अग्नि के समक्ष सात फेरे, सात वचन",
+      date: "2026-12-02",
+      start: "23:00",
+      ...VENUE,
+      theme: { bg1: "#c9501c", bg2: "#4a0c08", accent: "#ffd27a", ink: "#fff4e6", card: "rgba(0,0,0,0.24)", btnInk: "#4a0c08" },
+    },
   ],
 
-  // Shown only on the family link (/wedding/family/), before the main events.
+  // Shown only on the family link (/wedding-invitation/family/), before the main events.
   familyEvents: [
     {
       id: "ganesh-puja",
@@ -199,7 +210,7 @@ const STRINGS = {
     date: "दिनांक", time: "समय", venue: "स्थान",
     onwards: (hhmm) => {
       const [h, m] = hhmm.split(":").map(Number);
-      const part = h < 12 ? "सुबह" : h < 16 ? "दोपहर" : "शाम";
+      const part = h < 12 ? "सुबह" : h < 16 ? "दोपहर" : h < 20 ? "शाम" : "रात";
       return `${part} ${h % 12 || 12}:${String(m).padStart(2, "0")} बजे से`;
     },
     viewMap: "नक्शे पर देखें",
@@ -968,11 +979,11 @@ function setupHearts() {
 }
 
 /* ---------- Auto-advance ---------- */
-// Moves to the next page every 15 s, stopping at the last one. Any touch, scroll
+// Moves to the next page every 8 s, stopping at the last one. Any touch, scroll
 // wheel or key press pauses it; it restarts 3.5 s after the guest stops.
 const AutoAdvance = {
-  DELAY: 15000,
-  IDLE: 3500, // wait after the guest stops touching before the 15 s bar restarts
+  DELAY: 8000,
+  IDLE: 3500, // wait after the guest stops touching before the 8 s bar restarts
   timer: null,
   idleTimer: null,
   start() {
@@ -1059,6 +1070,10 @@ setupHearts();
 drawEnvelope();
 $(".hero-mandala").innerHTML = mandalaSVG();
 buildEvents();
+// A small Ganesh ji at the top of every page after Home (which has its own).
+$$("#scroller .section:not(#home)").forEach((s) =>
+  s.insertAdjacentHTML("afterbegin", '<img class="page-ganesh" src="assets/images/ganesh-gold.png" alt="" width="239" height="503" />')
+);
 render();
 setupLang();
 startCountdown();
