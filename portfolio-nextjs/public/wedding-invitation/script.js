@@ -174,7 +174,7 @@ const toDate = (date, time) => new Date(`${date}T${time}:00${CONFIG.tzOffset}`);
 const STRINGS = {
   en: {
     invited: "You are cordially invited",
-    families: "Together with their families",
+    families: "Together with our families",
     tapSeal: "Tap the seal to open",
     invocation: "॥ श्री गणेशाय नमः ॥", // shown in Hindi in both languages
     inviteLine: "request the pleasure of your company<br />as they begin their journey together",
