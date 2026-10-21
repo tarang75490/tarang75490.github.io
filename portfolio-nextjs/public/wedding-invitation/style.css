@@ -181,7 +181,7 @@ a { color: inherit; }
   z-index: 5;
   text-align: center;
   font-style: italic;
-  font-size: 1.05rem;
+  font-size: 1.3rem;
   color: var(--gold-light);
   animation: pulse 2.2s ease-in-out 1s infinite both;
 }
@@ -481,7 +481,7 @@ body:not(.locked) .scroller { opacity: 1; }
 }
 .regards {
   font-family: var(--script);
-  font-size: clamp(2.2rem, 9vw, 3rem);
+  font-size: clamp(2.7rem, 11vw, 3.6rem);
   color: var(--gold-light);
   margin-top: 0.2rem;
 }
@@ -638,8 +638,9 @@ body:not(.locked) .scroller { opacity: 1; }
   opacity: 0.92;
   text-wrap: balance;
 }
-.person-line + .person-line { font-style: italic; margin-top: 0.15rem; }
+.person-line + .person-line { font-style: italic; margin-top: 0.5rem; }
 .person-line .rel {
+  display: block; /* "SON OF" on its own line, names below */
   font-family: var(--caps);
   font-style: normal;
   font-size: 0.78em;
@@ -941,7 +942,7 @@ body:not(.locked) .hero .reveal.visible > * { opacity: 1; transform: none; }
 .hero .reveal > :nth-child(9) { transition-delay: 1s; }
 
 /* controls that sit over the cream card */
-.lang-btn { color: #b8862b; opacity: 0.6; right: auto; left: 50%; transform: translateX(-50%); }
+.lang-btn { color: #b8862b; opacity: 0.85; font-weight: 700; font-size: 1rem; right: auto; left: 50%; transform: translateX(-50%); }
 .dots button { border-color: var(--gold); }
 .dots button.active { background: var(--gold); }
 
@@ -998,3 +999,68 @@ body:not(.locked) .hero .reveal.visible > * { opacity: 1; transform: none; }
 .event-tagline { font-weight: 600; opacity: 1; }
 /* cream on the saffron Ganesh Puja and Mangal Pheras pages, where gold fades in */
 #ganesh-puja .page-ganesh, #pheras .page-ganesh { filter: brightness(0) invert(1) sepia(0.3); }
+
+/* Event illustrations: pinned to the bottom of the page, fading out as they rise
+   (and softly at the sides). */
+.event-art {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  translate: -50% 0;
+  width: min(100%, 560px);
+  height: auto;
+  opacity: 0.4;
+  mix-blend-mode: luminosity;
+  -webkit-mask-image: linear-gradient(to top, #000 35%, transparent 100%), linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to top, #000 35%, transparent 100%), linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+/* On phones the drawing runs edge to edge, so only the upward fade applies. */
+@media (max-width: 560px) {
+  .event-art {
+    -webkit-mask-image: linear-gradient(to top, #000 35%, transparent 100%);
+    mask-image: linear-gradient(to top, #000 35%, transparent 100%);
+  }
+}
+
+/* On pages with an illustration there is no card box, just the text over the drawing. */
+.event:has(.event-art) .event-card {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.event:has(.event-art) .event-card::before { display: none; }
+
+/* Ganesh shloka under the invocation on Home (always Devanagari). */
+.shloka {
+  font-family: "Tiro Devanagari Hindi", var(--serif);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #8a1c2b;
+  opacity: 0.85;
+  margin: -0.4rem 0 1rem;
+}
+@media (max-height: 760px) {
+  .shloka { font-size: 0.85rem; margin-bottom: 0.6rem; }
+}
+
+/* Instagram link under the Our Moments reel. */
+.social-moments { margin-top: 1.1rem; }
+.social-moments .insta { margin-top: 0.5rem; }
+
+/* Mangal Pheras: a photo of joined hands; keep it full width and let more of it show. */
+#pheras .event-art {
+  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 55%, transparent 100%);
+}
+
+/* Get Directions on event pages: a softer, see-through pill rather than a solid one. */
+.event .btn {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+}

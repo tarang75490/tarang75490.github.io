@@ -26,9 +26,9 @@ const CONFIG = {
     firstHi: "तरंग",
     full: "Tarang Khetan",
     fullHi: "तरंग खेतान",
-    grandparents: "Gr/S/o Late Mrs. Sita Devi & Late Mr. Santulal Khetan",
+    grandparents: "GRANDSON OF — Late Mrs. Sita Devi & Late Mr. Santulal Khetan",
     grandparentsHi: "पौत्र — स्व. श्रीमती सीता देवी एवं स्व. श्री संतूलाल खेतान",
-    parents: "S/o Mrs. Sheela Khetan & Mr. Sanjay Khetan",
+    parents: "SON OF — Mrs. Sheela Khetan & Mr. Sanjay Khetan",
     parentsHi: "सुपुत्र — श्रीमती शीला खेतान एवं श्री संजय खेतान",
   },
   bride: {
@@ -36,9 +36,9 @@ const CONFIG = {
     firstHi: "मुस्कान",
     full: "Muskan Mittal",
     fullHi: "मुस्कान मित्तल",
-    grandparents: "Gr/D/o Late Mrs. Chadrapati Devi & Late Mr. Bishamber Dayal Agarwal",
+    grandparents: "GRANDDAUGHTER OF — Late Mrs. Chadrapati Devi & Late Mr. Bishamber Dayal Agarwal",
     grandparentsHi: "पौत्री — स्व. श्रीमती चन्द्रपति देवी एवं स्व. श्री बिशम्बर दयाल अग्रवाल",
-    parents: "D/o Mrs. Vinita Agarwal & Mr. Raj Kumar Agarwal",
+    parents: "DAUGHTER OF — Mrs. Vinita Agarwal & Mr. Raj Kumar Agarwal",
     parentsHi: "सुपुत्री — श्रीमती विनीता अग्रवाल एवं श्री राज कुमार अग्रवाल",
   },
   initials: "T&M",
@@ -61,6 +61,7 @@ const CONFIG = {
   events: [
     {
       id: "mayra",
+      art: "assets/images/art-mayra.jpg",
       name: "Mayra",
       nameHi: "मायरा",
       tagline: "Blessings from the maternal family",
@@ -72,6 +73,7 @@ const CONFIG = {
     },
     {
       id: "sangeet",
+      art: "assets/images/art-sangeet.jpg",
       name: "Sangeet Evening",
       nameHi: "संगीत संध्या",
       tagline: "An evening of song, dance & celebration",
@@ -83,6 +85,7 @@ const CONFIG = {
     },
     {
       id: "haldi",
+      art: "assets/images/art-haldi.jpg",
       name: "Sunkissed Haldi",
       nameHi: "सुनहरी हल्दी",
       tagline: "A splash of turmeric, a lot of laughter",
@@ -94,18 +97,20 @@ const CONFIG = {
     },
     {
       id: "baraat",
+      art: "assets/images/art-baraat.jpg",
       name: "Korath (Nikasi) & Baraat",
       nameHi: "कोरथ (निकासी) एवं बारात",
       tagline: "The groom sets out with music & dhol",
       taglineHi: "ढोल-नगाड़ों के संग दूल्हे राजा की रवानगी",
       date: "2026-12-02",
-      start: "17:00",
+      start: "16:30",
       main: true,
       ...VENUE,
       theme: { bg1: "#a3172b", bg2: "#3d040d", accent: "#f3cf6b", ink: "#fdf6e3", card: "rgba(0,0,0,0.25)", btnInk: "#3d040d" },
     },
     {
       id: "reception",
+      art: "assets/images/art-reception.jpg",
       name: "Reception",
       nameHi: "प्रीतिभोज",
       tagline: "Dinner, dancing & celebrations",
@@ -117,6 +122,7 @@ const CONFIG = {
     },
     {
       id: "pheras",
+      art: "assets/images/art-pheras-hands.jpg",
       name: "Mangal Pheras",
       nameHi: "मंगल फेरे",
       tagline: "Seven sacred vows around the holy fire",
@@ -143,8 +149,8 @@ const CONFIG = {
     },
     {
       id: "kirtan",
-      name: "Shri Shyam Ji Kirtan Evening",
-      nameHi: "श्री श्याम जी कीर्तन संध्या",
+      name: "Shyam Baba Kirtan Evening",
+      nameHi: "श्याम बाबा कीर्तन संध्या",
       tagline: "An evening of bhajans & devotion",
       taglineHi: "भजनों और भक्ति की एक शाम",
       date: "2026-11-29",
@@ -271,6 +277,7 @@ function buildEvents() {
       const style = `--bg1:${t.bg1};--bg2:${t.bg2};--accent:${t.accent};--ink:${t.ink};--card:${t.card};--btn-ink:${t.btnInk}`;
       return `
       <section id="${ev.id}" class="section event" style="${style}">
+        ${ev.art ? `<img class="event-art" src="${ev.art}" alt="" decoding="async" />` : ""}
         <div class="mandala" aria-hidden="true">${mandalaSVG()}</div>
         <article class="event-card reveal"></article>
       </section>`;
@@ -291,7 +298,7 @@ function render() {
   fill("data-bride", tr(bride, "first"));
   fill("data-groom-full", tr(groom, "full"));
   fill("data-bride-full", tr(bride, "full"));
-  // Family lines: the relation ("S/o", "सुपुत्र") is set apart in gold.
+  // Family lines: the relation ("SON OF", "सुपुत्र") is set apart in gold.
   const lineage = (attr, text) => {
     const [rel, rest] = text.includes(" — ") ? text.split(" — ") : [text.split(" ")[0], text.slice(text.indexOf(" ") + 1)];
     $$(`[${attr}]`).forEach((el) => (el.innerHTML = `<span class="rel">${rel}</span> ${rest}`));
@@ -306,7 +313,7 @@ function render() {
   fill("data-date-short", formatDate(mainEvent.date, { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, " · "));
   fill("data-closing", tr(CONFIG, "closingMessage"));
   fill("data-regards", tr(CONFIG, "regards"));
-  $("#instagram").href = CONFIG.instagram;
+  $$(".insta").forEach((a) => (a.href = CONFIG.instagram));
   fill("data-instagram-handle", "@" + CONFIG.instagram.split("/").filter(Boolean).pop());
 
   const digits = (p) => p.replace(/\D/g, "");
@@ -646,7 +653,7 @@ const Music = {
   },
   startTrack(i, fadeIn) {
     const el = this.players[i];
-    el.currentTime = 0;
+    el.currentTime = Number(el.dataset.start) || 0; // data-start skips silence at the top of a file
     if (!this.ctx) el.volume = 0;
     this.current = i;
     this.active.add(el);
