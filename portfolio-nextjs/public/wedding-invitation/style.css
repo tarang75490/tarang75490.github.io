@@ -1064,3 +1064,17 @@ body:not(.locked) .hero .reveal.visible > * { opacity: 1; transform: none; }
   color: var(--ink);
   border-color: color-mix(in srgb, var(--accent) 65%, transparent);
 }
+
+/* Kirtan: a close-up of Krishna, so let more of it show from lower down. */
+#kirtan .event-art {
+  opacity: 0.4;
+  -webkit-mask-image: linear-gradient(to top, #000 60%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 60%, transparent 100%);
+}
+
+/* Sangeet: a dark night-time scene, so it needs more strength to read on the purple. */
+#sangeet .event-art {
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(to top, #000 60%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 60%, transparent 100%);
+}

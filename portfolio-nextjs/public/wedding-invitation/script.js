@@ -73,7 +73,7 @@ const CONFIG = {
     },
     {
       id: "sangeet",
-      art: "assets/images/art-sangeet.jpg",
+      art: "assets/images/art-sangeet-night.jpg",
       name: "Sangeet Evening",
       nameHi: "संगीत संध्या",
       tagline: "An evening of song, dance & celebration",
@@ -138,6 +138,7 @@ const CONFIG = {
   familyEvents: [
     {
       id: "ganesh-puja",
+      art: "assets/images/art-ganesh-puja.jpg",
       name: "Ganesh Puja & Vyah Haath",
       nameHi: "गणेश पूजन एवं ब्याह हाथ",
       tagline: "Seeking Lord Ganesha's blessings to begin",
@@ -149,6 +150,7 @@ const CONFIG = {
     },
     {
       id: "kirtan",
+      art: "assets/images/art-kirtan-krishna.jpg",
       name: "Shyam Baba Kirtan Evening",
       nameHi: "श्याम बाबा कीर्तन संध्या",
       tagline: "An evening of bhajans & devotion",
